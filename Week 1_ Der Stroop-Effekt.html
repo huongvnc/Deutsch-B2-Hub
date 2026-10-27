@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>German B2–C1 Vocabulary: Verbs, Nouns & Expressions</title>
+<style>
+:root{--bg:#f4f6fb;--panel:#fff;--ink:#20283a;--muted:#667085;--accent:#4f46e5;--soft:#ecebff;--line:#dce2ed;--good:#137547;--bad:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:960px;margin:auto;padding:24px 16px 48px}h1{font-size:clamp(1.7rem,4vw,2.45rem);line-height:1.15;margin:10px 0}h2{margin:0 0 12px}.muted{color:var(--muted)}.tag{display:inline-block;background:#e9eaf4;border-radius:99px;padding:4px 10px;font-size:.82rem}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}.tabs button,button{font:inherit;font-weight:650;border:0;border-radius:11px;padding:10px 15px;cursor:pointer}.tabs button{background:#e6e9f2;color:var(--ink)}.tabs button.active,button.primary{background:var(--accent);color:white}button.secondary{background:var(--soft);color:#3730a3}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 5px 18px #18204408}.hidden{display:none!important}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.flashcard{width:100%;min-height:240px;margin:16px 0;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#fff,#f6f5ff);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;cursor:pointer}.word{font-size:clamp(1.5rem,5vw,2.35rem);font-weight:800;overflow-wrap:anywhere}.answer{font-size:1.1rem;margin-top:15px;white-space:pre-line}.hint{color:var(--muted);margin-top:12px}.controls{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.progress{height:8px;border-radius:99px;background:#e7eaf2;overflow:hidden;margin:15px 0}.progress div{height:100%;width:0;background:var(--accent)}select,input[type=search]{font:inherit;padding:10px;border:1px solid #cbd2e1;border-radius:10px;background:white;color:var(--ink)}label.field{display:block;font-weight:650;margin:12px 0 6px}.question{padding:15px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.options{display:grid;gap:8px;margin-top:10px}.option{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-weight:400;cursor:pointer}.option input{margin-top:6px}.feedback{font-size:.93rem;font-weight:650;margin-top:8px}.correct{color:var(--good)}.incorrect{color:var(--bad)}table{border-collapse:collapse;width:100%;margin-top:14px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:.9rem;color:var(--muted)}.footer{font-size:.9rem;color:var(--muted);margin-top:25px}@media(min-width:700px){.quizgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}}
+</style>
+</head>
+<body><main>
+<span class="tag">German vocabulary · B2–C1</span>
+<h1>Der Stroop-Effekt</h1>
+<p class="muted">Flashcards and self-checking exercises for the verbs, nouns, and phrasal verbs / verb expressions from the original vocabulary lists.</p>
+<div class="tabs" role="tablist"><button class="active" data-tab="cards" aria-selected="true">Flashcards</button><button data-tab="exercise" aria-selected="false">Exercises</button><button data-tab="vocab" aria-selected="false">Full vocabulary</button></div>
+
+<section id="cards" class="panel">
+<div class="row"><h2>Flashcards</h2><span class="tag" id="counter">1 / 55</span></div>
+<div class="row"><label class="field" for="filter" style="margin:0">Choose category</label><select id="filter"><option value="all">All vocabulary</option><option value="Verb">Verbs</option><option value="Noun">Nouns</option><option value="Expression">Phrasal verbs & expressions</option></select></div>
+<div class="progress"><div id="bar"></div></div>
+<button class="flashcard" id="card" aria-label="Reveal answer"><span class="tag" id="type">Verb · B2–C1</span><span class="word" id="front">beeinträchtigen</span><span class="hint" id="hint">Click the card to reveal the meaning</span><span class="answer hidden" id="back"></span></button>
+<div class="controls"><button class="secondary" id="prev">← Previous</button><button class="primary" id="flip">Show answer</button><button class="secondary" id="next">Next →</button><button class="secondary" id="shuffle">Shuffle</button></div>
+<p class="muted" style="text-align:center;font-size:.9rem">Try to recall the English meaning and say the German example aloud.</p>
+</section>
+
+<section id="exercise" class="panel hidden">
+<div class="row"><h2>Exercises</h2><span class="tag">15 questions</span></div>
+<p class="muted">Select one answer for each question, then check your score and explanations.</p>
+<form id="quiz"><div id="questions" class="quizgrid"></div><div class="controls" style="margin-top:18px"><button class="primary" type="submit">Check answers</button><button class="secondary" type="button" id="retry">Try again</button></div></form>
+<div id="score" class="panel hidden" aria-live="polite"></div>
+</section>
+
+<section id="vocab" class="panel hidden">
+<div class="row"><h2>Full vocabulary list</h2><input type="search" id="search" placeholder="Search German or English…" aria-label="Search vocabulary"></div>
+<div style="overflow-x:auto"><table><thead><tr><th>German</th><th>English</th><th>Category</th><th>Level</th></tr></thead><tbody id="rows"></tbody></table></div>
+</section>
+<p class="footer">This file works offline. Save it and open it in any modern browser. No account or internet connection is required.</p>
+</main>
+<script>
+const words = [
+{de:"beschreiben",en:"to describe",cat:"Verb",level:"B2",ex:"Der Forscher beschreibt das psychologische Phänomen."},
+{de:"sich ableiten von + Dativ",en:"to derive from",cat:"Expression",level:"C1",ex:"Der Begriff leitet sich von einer Theorie ab."},
+{de:"untersuchen",en:"to examine; to investigate",cat:"Verb",level:"B2",ex:"Die Studie untersucht die Funktionsweise des Gehirns."},
+{de:"schaffen",en:"to create; to establish",cat:"Verb",level:"B2",ex:"Der Test schafft einen Konflikt zwischen zwei Handlungen."},
+{de:"beeinträchtigen",en:"to impair; to negatively affect",cat:"Verb",level:"C1",ex:"Stress kann die Konzentration beeinträchtigen."},
+{de:"ausgesetzt sein + Dativ",en:"to be exposed to",cat:"Expression",level:"C1",ex:"Wir sind täglich visuellen Reizen ausgesetzt."},
+{de:"etwas mit etwas verbinden",en:"to associate something with something",cat:"Expression",level:"B2",ex:"Viele Menschen verbinden Rot mit Gefahr."},
+{de:"bedeuten",en:"to mean; to signify",cat:"Verb",level:"B2",ex:"Rot bedeutet, dass man stehen bleiben muss."},
+{de:"ablaufen",en:"to take place; to proceed",cat:"Verb",level:"B2",ex:"Der Test läuft in zwei Phasen ab."},
+{de:"vorlesen",en:"to read aloud",cat:"Verb",level:"B2",ex:"Die Teilnehmenden sollen die Wörter laut vorlesen."},
+{de:"unterdrücken",en:"to suppress",cat:"Verb",level:"C1",ex:"Das Gehirn muss die automatische Reaktion unterdrücken."},
+{de:"konkurrieren mit + Dativ",en:"to compete with",cat:"Expression",level:"C1",ex:"Zwei kognitive Prozesse konkurrieren miteinander."},
+{de:"verwirren",en:"to confuse",cat:"Verb",level:"B2",ex:"Widersprüchliche Informationen verwirren das Gehirn."},
+{de:"erfordern",en:"to require",cat:"Verb",level:"C1",ex:"Diese Aufgabe erfordert viel Konzentration."},
+{de:"benennen",en:"to name; to identify",cat:"Verb",level:"B2–C1",ex:"Die Teilnehmenden müssen die Farbe benennen."},
+{de:"übereinstimmen mit + Dativ",en:"to match; to correspond to",cat:"Verb",level:"B2",ex:"Die Wortfarbe stimmt mit der Bedeutung überein."},
+{de:"reagieren auf + Akkusativ",en:"to react to",cat:"Verb",level:"B2",ex:"Das Gehirn reagiert auf unterschiedliche Reize."},
+{de:"darstellen",en:"to represent; to depict",cat:"Verb",level:"B2",ex:"Die Grafik stellt die Ergebnisse dar."},
+{de:"benötigen",en:"to need; to require",cat:"Verb",level:"B2",ex:"Für diese Aufgabe benötigt man mehr Zeit."},
+{de:"gelingen",en:"to succeed; to work out successfully",cat:"Verb",level:"B2",ex:"Die Übung gelingt nicht immer sofort."},
+{de:"der Bestandteil, die Bestandteile",en:"component; integral part",cat:"Noun",level:"B2",ex:"Der Test ist ein Bestandteil der Forschung."},
+{de:"die Funktionsweise, die Funktionsweisen",en:"functioning; how something works",cat:"Noun",level:"C1",ex:"Die Funktionsweise des Gehirns wird untersucht."},
+{de:"die Aufmerksamkeit",en:"attention",cat:"Noun",level:"B2",ex:"Der Test untersucht die selektive Aufmerksamkeit."},
+{de:"die Handlung, die Handlungen",en:"action; act",cat:"Noun",level:"B2",ex:"Der Test vergleicht zwei Handlungen."},
+{de:"der Konflikt, die Konflikte",en:"conflict",cat:"Noun",level:"B2",ex:"Es entsteht ein Konflikt zwischen Wort und Farbe."},
+{de:"die Bezeichnung, die Bezeichnungen",en:"designation; term",cat:"Noun",level:"C1",ex:"Farbe-Wort-Interferenz-Test ist eine Bezeichnung für den Test."},
+{de:"die Interferenz, die Interferenzen",en:"interference",cat:"Noun",level:"C1",ex:"Die Interferenz kann die Reaktionszeit verlängern."},
+{de:"das Verständnis",en:"understanding",cat:"Noun",level:"B2",ex:"Das Verständnis der Farbbedeutung ist wichtig."},
+{de:"die Bedeutung, die Bedeutungen",en:"meaning; significance",cat:"Noun",level:"B2",ex:"Die Bedeutung der Farbe beeinflusst die Reaktion."},
+{de:"die Beeinträchtigung, die Beeinträchtigungen",en:"impairment; adverse effect",cat:"Noun",level:"C1",ex:"Stress kann zu einer Beeinträchtigung führen."},
+{de:"der Farbwechsel, die Farbwechsel",en:"change of colour",cat:"Noun",level:"B2",ex:"Ampeln zeigen einen Farbwechsel."},
+{de:"die Verhaltensweise, die Verhaltensweisen",en:"pattern of behaviour",cat:"Noun",level:"C1",ex:"Farben können bestimmte Verhaltensweisen auslösen."},
+{de:"der Alltag",en:"everyday life",cat:"Noun",level:"B2",ex:"Ampeln sind Teil unseres Alltags."},
+{de:"die Phase, die Phasen",en:"phase; stage",cat:"Noun",level:"B2",ex:"Der Test besteht aus zwei Phasen."},
+{de:"der Prozess, die Prozesse",en:"process",cat:"Noun",level:"B2",ex:"Lesen ist ein weitgehend automatischer Prozess."},
+{de:"der Arbeitsschritt, die Arbeitsschritte",en:"step in a process",cat:"Noun",level:"B2",ex:"Zusätzliche Arbeitsschritte benötigen Zeit."},
+{de:"die Konzentration",en:"concentration",cat:"Noun",level:"B2",ex:"Die Aufgabe erfordert Konzentration."},
+{de:"das Phänomen, die Phänomene",en:"phenomenon",cat:"Noun",level:"C1",ex:"Der Stroop-Effekt ist ein psychologisches Phänomen."},
+{de:"der Farbname, die Farbnamen",en:"colour name",cat:"Noun",level:"B2",ex:"Der Farbname passt nicht immer zur Druckfarbe."},
+{de:"der Reiz, die Reize",en:"stimulus",cat:"Noun",level:"C1",ex:"Das Gehirn verarbeitet visuelle Reize."},
+{de:"die Reaktion, die Reaktionen",en:"reaction; response",cat:"Noun",level:"B2",ex:"Die Reaktion kann langsamer ausfallen."},
+{de:"der Zusammenhang, die Zusammenhänge",en:"connection; relationship",cat:"Noun",level:"B2",ex:"Es besteht ein Zusammenhang zwischen Konflikt und Reaktionszeit."},
+{de:"die Forschung",en:"research",cat:"Noun",level:"B2",ex:"Der Stroop-Effekt ist wichtig für die psychologische Forschung."},
+{de:"stehen bleiben",en:"to stop; to remain standing",cat:"Expression",level:"B2",ex:"Bei Rot müssen Fußgänger stehen bleiben."},
+{de:"weitergehen",en:"to continue; to go on",cat:"Verb",level:"B2",ex:"Bei Grün darf man weitergehen."},
+{de:"es handelt sich um + Akkusativ",en:"to be a matter of; to concern",cat:"Expression",level:"B2",ex:"Es handelt sich um ein psychologisches Experiment."},
+{de:"ins Stocken geraten",en:"to falter; to come to a halt",cat:"Expression",level:"B2–C1",ex:"Beim Vorlesen geriet sie ins Stocken."},
+{de:"sich verhaspeln",en:"to stumble over one's words",cat:"Verb",level:"B2",ex:"Unter Zeitdruck kann man sich verhaspeln."},
+{de:"zurückzuführen sein auf + Akkusativ",en:"to be attributable to",cat:"Expression",level:"C1",ex:"Der Effekt ist auf einen kognitiven Konflikt zurückzuführen."},
+{de:"Einfluss haben auf + Akkusativ",en:"to have an influence on",cat:"Expression",level:"B2",ex:"Schlaf hat Einfluss auf die Konzentration."},
+{de:"eine Rolle spielen",en:"to play a role",cat:"Expression",level:"B2",ex:"Die Aufmerksamkeit spielt eine wichtige Rolle."},
+{de:"in der Lage sein, etwas zu tun",en:"to be able to do something",cat:"Expression",level:"B2",ex:"Das Gehirn ist in der Lage, Reize zu verarbeiten."},
+{de:"zur Folge haben",en:"to result in; to lead to",cat:"Expression",level:"C1",ex:"Die Interferenz hat eine langsamere Reaktion zur Folge."},
+{de:"im Zusammenhang stehen mit + Dativ",en:"to be connected with",cat:"Expression",level:"C1",ex:"Aufmerksamkeit steht im Zusammenhang mit kognitiven Prozessen."}
+];
+const questions=[
+{q:"What does „beeinträchtigen“ mean?",o:["to impair","to read aloud","to create"],a:0,e:"beeinträchtigen = to impair or negatively affect."},
+{q:"Complete: Der Test läuft in zwei Phasen ___.",o:["ab","auf","mit"],a:0,e:"ablaufen is separable: Der Test läuft ab."},
+{q:"Which article is correct?",o:["der Aufmerksamkeit","die Aufmerksamkeit","das Aufmerksamkeit"],a:1,e:"Aufmerksamkeit is feminine: die Aufmerksamkeit."},
+{q:"„ins Stocken geraten“ means…",o:["to play a role","to falter","to be exposed to"],a:1,e:"ins Stocken geraten = to falter or come to a halt."},
+{q:"Complete: Die Wortfarbe stimmt ___ der Bedeutung überein.",o:["auf","mit","für"],a:1,e:"übereinstimmen takes mit + dative."},
+{q:"What does „unterdrücken“ mean?",o:["to suppress","to investigate","to represent"],a:0,e:"unterdrücken = to suppress."},
+{q:"What is „der Reiz“ in English?",o:["response","stimulus","conflict"],a:1,e:"der Reiz = stimulus; plural die Reize."},
+{q:"Complete: Der Effekt ist auf einen Konflikt ___.",o:["zurückzuführen","ausgesetzt","vorgelesen"],a:0,e:"zurückzuführen sein auf = to be attributable to."},
+{q:"„die Funktionsweise“ means…",o:["functioning / how something works","designation","concentration"],a:0,e:"die Funktionsweise describes how something operates."},
+{q:"Which preposition follows „reagieren“ here?",o:["mit + Dativ","auf + Akkusativ","von + Dativ"],a:1,e:"reagieren auf + accusative."},
+{q:"What does „sich verhaspeln“ mean?",o:["to stumble over one's words","to suppress a response","to derive from"],a:0,e:"sich verhaspeln = to stumble over one's words."},
+{q:"„eine Rolle spielen“ means…",o:["to play a role","to compete","to require"],a:0,e:"eine Rolle spielen = to play a role."},
+{q:"Which noun means “interference”?",o:["die Interferenz","die Handlung","der Farbname"],a:0,e:"die Interferenz = interference."},
+{q:"Complete: Wir sind visuellen Reizen ___ .",o:["ausgesetzt","übereingestimmt","benannt"],a:0,e:"ausgesetzt sein + dative = to be exposed to."},
+{q:"What does „erfordern“ mean?",o:["to confuse","to require","to stop"],a:1,e:"erfordern = to require."}
+];
+let deck=[...words],idx=0,shown=false;
+const $=id=>document.getElementById(id);
+function renderCard(){if(!deck.length)return;idx=(idx+deck.length)%deck.length;let w=deck[idx];$("counter").textContent=`${idx+1} / ${deck.length}`;$("bar").style.width=`${(idx+1)/deck.length*100}%`;$("type").textContent=`${w.cat} · ${w.level}`;$("front").textContent=w.de;$("back").textContent=`${w.en}\nExample: ${w.ex}`;$("back").classList.toggle("hidden",!shown);$("hint").classList.toggle("hidden",shown);$("flip").textContent=shown?"Hide answer":"Show answer";}
+function flip(){shown=!shown;renderCard()}
+$("card").addEventListener("click",flip);$("flip").addEventListener("click",flip);$("prev").addEventListener("click",()=>{idx--;shown=false;renderCard()});$("next").addEventListener("click",()=>{idx++;shown=false;renderCard()});
+$("shuffle").addEventListener("click",()=>{for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}idx=0;shown=false;renderCard()});
+$("filter").addEventListener("change",e=>{deck=e.target.value==="all"?[...words]:words.filter(w=>w.cat===e.target.value);idx=0;shown=false;renderCard()});
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tabs button").forEach(x=>{x.classList.toggle("active",x===b);x.setAttribute("aria-selected",x===b?"true":"false")});["cards","exercise","vocab"].forEach(id=>$(id).classList.toggle("hidden",id!==b.dataset.tab))}));
+function renderQuiz(){$("questions").innerHTML="";questions.forEach((q,i)=>{let d=document.createElement("div");d.className="question";let title=document.createElement("strong");title.textContent=`${i+1}. ${q.q}`;d.append(title);let os=document.createElement("div");os.className="options";q.o.forEach((opt,j)=>{let l=document.createElement("label");l.className="option";let r=document.createElement("input");r.type="radio";r.name="q"+i;r.value=j;r.required=true;let s=document.createElement("span");s.textContent=opt;l.append(r,s);os.append(l)});d.append(os);let f=document.createElement("div");f.id="fb"+i;f.className="feedback hidden";d.append(f);$("questions").append(d)})}
+$("quiz").addEventListener("submit",e=>{e.preventDefault();let n=0;questions.forEach((q,i)=>{let chosen=document.querySelector(`input[name="q${i}"]:checked`);let f=$("fb"+i);f.classList.remove("hidden","correct","incorrect");if(chosen&&+chosen.value===q.a){n++;f.classList.add("correct");f.textContent="Correct! "+q.e}else{f.classList.add("incorrect");f.textContent=`Correct answer: ${q.o[q.a]}. ${q.e}`}});$("score").classList.remove("hidden");$("score").innerHTML=`<h2>Score: ${n} / ${questions.length}</h2><p>${n===questions.length?"Excellent work!":n>=11?"Good job. Review the missed answers.":"Keep practising with the flashcards, then try again."}</p>`;$("score").scrollIntoView({behavior:"smooth",block:"nearest"})});
+$("retry").addEventListener("click",()=>{$("quiz").reset();$("score").classList.add("hidden");questions.forEach((_,i)=>$("fb"+i).classList.add("hidden"))});
+function renderRows(term=""){$("rows").innerHTML="";words.filter(w=>(w.de+" "+w.en+" "+w.cat+" "+w.level).toLowerCase().includes(term.toLowerCase())).forEach(w=>{let tr=document.createElement("tr");[w.de,w.en,w.cat,w.level].forEach(t=>{let td=document.createElement("td");td.textContent=t;tr.append(td)});$("rows").append(tr)})}
+$("search").addEventListener("input",e=>renderRows(e.target.value));renderCard();renderQuiz();renderRows();
+</script></body></html>

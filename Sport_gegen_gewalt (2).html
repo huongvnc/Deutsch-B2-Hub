@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport gegen Gewalt - Übungen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .perspective { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12 font-sans">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-8 shadow-md">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-3xl font-bold tracking-tight">Sport gegen Gewalt</h1>
+            <p class="mt-2 text-indigo-100 text-lg">Interaktiver Wortschatztrainer (B1-B2)</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 mt-8 space-y-10">
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 bg-white rounded-t-xl p-2 shadow-sm gap-2">
+            <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn flex-1 py-3 px-4 font-semibold text-center rounded-lg bg-indigo-50 text-indigo-600 transition">
+                🎴 Flashcards
+            </button>
+            <button onclick="switchTab('fillblank')" id="tab-fillblank" class="tab-btn flex-1 py-3 px-4 font-semibold text-center rounded-lg text-slate-600 hover:bg-slate-100 transition">
+                ✍️ Điền từ vào chỗ trống
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn flex-1 py-3 px-4 font-semibold text-center rounded-lg text-slate-600 hover:bg-slate-100 transition">
+                ❓ Trắc nghiệm (Multiple Choice)
+            </button>
+        </div>
+
+        <!-- Section 1: Flashcards -->
+        <section id="section-flashcards" class="tab-content">
+            <div class="bg-white p-6 rounded-b-xl rounded-tr-xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-slate-800">Flashcards Từ vựng (6 Đoạn)</h2>
+                    <span id="card-indicator" class="text-sm font-medium text-slate-500">1 / 12</span>
+                </div>
+
+                <div class="perspective h-64 w-full max-w-md mx-auto cursor-pointer" onclick="flipCard()">
+                    <div id="flashcard" class="relative w-full h-full duration-500 transform-style-3d bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 shadow-md flex flex-col justify-center items-center text-center">
+                        <!-- Front -->
+                        <div class="absolute inset-0 backface-hidden flex flex-col justify-center items-center p-6">
+                            <span id="card-tag" class="text-xs font-bold uppercase tracking-wider text-indigo-500 mb-2">Đoạn 1</span>
+                            <h3 id="card-german" class="text-2xl font-bold text-indigo-900">sozial schwach</h3>
+                            <p class="text-xs text-slate-400 mt-4">(Nhấp để xem nghĩa tiếng Việt)</p>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 rotate-y-180 backface-hidden bg-indigo-600 text-white rounded-2xl p-6 flex flex-col justify-center items-center">
+                            <h4 id="card-vietnamese" class="text-xl font-semibold mb-2">Khó khăn về kinh tế - xã hội</h4>
+                            <p id="card-context" class="text-sm text-indigo-100 italic">"in einem sozial schwachen Stadtteil"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-6">
+                    <button onclick="prevCard()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-700 font-medium transition">Trước</button>
+                    <button onclick="nextCard()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">Tiếp theo</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Fill in the Blanks -->
+        <section id="section-fillblank" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 space-y-6">
+                <h2 class="text-xl font-bold text-slate-800 border-b pb-3">Điền từ thích hợp vào chỗ trống</h2>
+                
+                <div class="space-y-6" id="fillblank-container">
+                    <!-- Questions generated dynamically -->
+                </div>
+
+                <div class="pt-4 border-t flex justify-between items-center">
+                    <button onclick="checkFillBlank()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition">Kiem tra đáp án</button>
+                    <div id="fillblank-score" class="text-lg font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Multiple Choice Quiz -->
+        <section id="section-quiz" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 space-y-6">
+                <h2 class="text-xl font-bold text-slate-800 border-b pb-3">Trắc nghiệm Từ vựng & Ngữ cảnh</h2>
+
+                <div class="space-y-6" id="quiz-container">
+                    <!-- Quiz questions generated dynamically -->
+                </div>
+
+                <div class="pt-4 border-t flex justify-between items-center">
+                    <button onclick="checkQuiz()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition">Xem kết quả</button>
+                    <div id="quiz-score" class="text-lg font-bold"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Data structure
+        const cards = [
+            { german: "sozial schwach", vietnamese: "Khó khăn về kinh tế - xã hội", context: "in einem sozial schwachen Stadtteil", tag: "Đoạn 1" },
+            { german: "sich die Langeweile vertreiben", vietnamese: "Xua tan sự chán nản", context: "kann sich seine Langeweile vertreiben", tag: "Đoạn 1" },
+            { german: "jemanden erwischen", vietnamese: "Bắt quả tang ai đó", context: "Wer erwischt wurde, der bekam Hausverbot", tag: "Đoạn 2" },
+            { german: "übergeben (an + Akk)", vietnamese: "Bàn giao (cho ai)", context: "Wenn er sie der Polizei übergeben hatte...", tag: "Đoạn 2" },
+            { german: "tatenlos akzeptieren", vietnamese: "Chấp nhận thụ động / Khoanh tay đứng nhìn", context: "wollte nicht mehr tatenlos akzeptieren", tag: "Đoạn 3" },
+            { german: "die Selbstbeherrschung", vietnamese: "Sự tự chủ / Kiềm chế bản thân", context: "Eigenschaften wie Disziplin und Selbstbeherrschung", tag: "Đoạn 3" },
+            { german: "das Führungszeugnis", vietnamese: "Sơ yếu lý lịch / Phiếu lý lịch tư pháp", context: "Eintragungen der Polizei in ihr Führungszeugnis", tag: "Đoạn 4" },
+            { german: "sich die Zukunft verbauen", vietnamese: "Tự hủy hoại / Hủy hoại tương lai của mình", context: "hat hat sich seine Zukunft verbaut", tag: "Đoạn 4" },
+            { german: "Stresssituationen bewältigen", vietnamese: "Xử lý / Vượt qua các tình huống căng thẳng", context: "lernen, Stresssituationen ohne Waffe zu bewältigen", tag: "Đoạn 5" },
+            { german: "die Sachbeschädigung", vietnamese: "Hành vi phá hoại tài sản", context: "ist die Zahl der Sachbeschädigungen zurückgegangen", tag: "Đoạn 5" },
+            { german: "plagen", vietnamese: "Làm phiền / Trăn trở / Dằn dội", context: "Wen Probleme plagen, der hat die Möglichkeit...", tag: "Đoạn 6" },
+            { german: "das Vorbild", vietnamese: "Tấm gương / Hình mẫu", context: "gilt als Vorbild für ähnliche Projekte", tag: "Đoạn 6" }
+        ];
+
+        const fillBlankData = [
+            {
+                sentence: "Viele Jugendliche wohnen in einem __________ Stadtteil und haben wenige Möglichkeiten.",
+                answer: "sozial schwachen",
+                options: ["sozial schwachen", "tatenlos", "vorbildlichen"]
+            },
+            {
+                sentence: "Wenn man oft stiehlt, bekommt man eine Eintragung ins __________. Das verbaut die Zukunft.",
+                answer: "Führungszeugnis",
+                options: ["Einkaufszentrum", "Führungszeugnis", "Vorbild"]
+            },
+            {
+                sentence: "Beim Kampfsport lernt man Disziplin und __________, um nicht aggressiv zu werden.",
+                answer: "Selbstbeherrschung",
+                options: ["Sachbeschädigung", "Selbstbeherrschung", "Langeweile"]
+            },
+            {
+                sentence: "Er wollte nicht mehr __________ zusehen, wie die Jugendliche Probleme machten.",
+                answer: "tatenlos",
+                options: ["tatenlos", "stark", "bewältigt"]
+            },
+            {
+                sentence: "Durch den Verein ist die Zahl der Grafitti und __________ stark zurückgegangen.",
+                answer: "Sachbeschädigungen",
+                options: ["Ausbildungsplätze", "Sachbeschädigungen", "Waffen"]
+            }
+        ];
+
+        const quizData = [
+            {
+                question: "Cụm từ 'sich die Langeweile vertreiben' trong đoạn 1 có nghĩa là gì?",
+                answers: ["Tìm cách giải trí để bớt chán", "Cảm thấy nhàm chán", "Làm cho người khác chán"],
+                correct: 0
+            },
+            {
+                question: "Điều gì xảy ra khi thanh thiếu niên có 'Eintragungen im Führungszeugnis'?",
+                answers: ["Họ nhận được học bổng", "Họ tự hủy hoại cơ hội tương lai của mình", "Họ được tham gia câu lạc bộ thể thao"],
+                correct: 1
+            },
+            {
+                question: "Từ nào đồng nghĩa hoặc diễn tả đúng ý 'vượt qua / xử lý tình huống căng thẳng'?",
+                answers: ["Stresssituationen bewältigen", "Probleme plagen", "Sicherheit leiten"],
+                correct: 0
+            },
+            {
+                question: "Dự án 'Sport gegen Gewalt' được đánh giá là gì ở Đức?",
+                answers: ["Một hành vi vi phạm", "Một tấm gương / mô hình mẫu (Vorbild)", "Một môn học bắt buộc"],
+                correct: 1
+            }
+        ];
+
+        // State
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        // Flashcard Logic
+        function updateCard() {
+            const card = cards[currentCardIndex];
+            document.getElementById('card-german').innerText = card.german;
+            document.getElementById('card-vietnamese').innerText = card.vietnamese;
+            document.getElementById('card-context').innerText = `"${card.context}"`;
+            document.getElementById('card-tag').innerText = card.tag;
+            document.getElementById('card-indicator').innerText = `${currentCardIndex + 1} / ${cards.length}`;
+            
+            if (isFlipped) {
+                document.getElementById('flashcard').classList.remove('rotate-y-180');
+                isFlipped = false;
+            }
+        }
+
+        function flipCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.classList.toggle('rotate-y-180');
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % cards.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length;
+            updateCard();
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-50', 'text-indigo-600');
+                el.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.classList.add('bg-indigo-50', 'text-indigo-600');
+            activeBtn.classList.remove('text-slate-600');
+        }
+
+        // Render Fill in Blanks
+        function renderFillBlank() {
+            const container = document.getElementById('fillblank-container');
+            container.innerHTML = fillBlankData.map((item, idx) => `
+                <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                    <p class="font-medium text-slate-800 mb-3">${idx + 1}. ${item.sentence.replace('__________', '<span class="underline font-bold text-indigo-600">__________</span>')}</p>
+                    <div class="flex flex-wrap gap-3">
+                        ${item.options.map(opt => `
+                            <label class="flex items-center space-x-2 bg-white px-3 py-1.5 rounded border border-slate-300 cursor-pointer hover:bg-indigo-50">
+                                <input type="radio" name="fb-${idx}" value="${opt}" class="text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="fb-feedback-${idx}" class="mt-2 text-sm font-semibold hidden"></div>
+                </div>
+            `).join('');
+        }
+
+        function checkFillBlank() {
+            let correct = 0;
+            fillBlankData.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="fb-${idx}"]:checked`);
+                const feedbackEl = document.getElementById(`fb-feedback-${idx}`);
+                feedbackEl.classList.remove('hidden', 'text-green-600', 'text-red-600');
+
+                if (selected && selected.value === item.answer) {
+                    correct++;
+                    feedbackEl.innerText = "✓ Chính xác!";
+                    feedbackEl.classList.add('text-green-600');
+                } else {
+                    feedbackEl.innerText = `✗ Sai rồi. Đáp án đúng là: "${item.answer}"`;
+                    feedbackEl.classList.add('text-red-600');
+                }
+            });
+            document.getElementById('fillblank-score').innerText = `Kết quả: ${correct}/${fillBlankData.length}`;
+        }
+
+        // Render Quiz
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = quizData.map((item, idx) => `
+                <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                    <p class="font-medium text-slate-800 mb-3">${idx + 1}. ${item.question}</p>
+                    <div class="space-y-2">
+                        ${item.answers.map((ans, aIdx) => `
+                            <label class="flex items-center space-x-3 bg-white p-2.5 rounded border border-slate-300 cursor-pointer hover:bg-indigo-50">
+                                <input type="radio" name="qz-${idx}" value="${aIdx}" class="text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm text-slate-700">${ans}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="qz-feedback-${idx}" class="mt-2 text-sm font-semibold hidden"></div>
+                </div>
+            `).join('');
+        }
+
+        function checkQuiz() {
+            let correct = 0;
+            quizData.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="qz-${idx}"]:checked`);
+                const feedbackEl = document.getElementById(`qz-feedback-${idx}`);
+                feedbackEl.classList.remove('hidden', 'text-green-600', 'text-red-600');
+
+                if (selected && parseInt(selected.value) === item.correct) {
+                    correct++;
+                    feedbackEl.innerText = "✓ Chính xác!";
+                    feedbackEl.classList.add('text-green-600');
+                } else {
+                    feedbackEl.innerText = `✗ Sai rồi. Đáp án đúng: "${item.answers[item.correct]}"`;
+                    feedbackEl.classList.add('text-red-600');
+                }
+            });
+            document.getElementById('quiz-score').innerText = `Kết quả: ${correct}/${quizData.length}`;
+        }
+
+        // Init
+        updateCard();
+        renderFillBlank();
+        renderQuiz();
+    </script>
+</body>
+</html>

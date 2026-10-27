@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Wirkung der Farben — Flashcards & Exercises</title>
+<style>
+:root{--ink:#172033;--muted:#64748b;--paper:#f5f7fb;--panel:#fff;--line:#dce3ee;--blue:#3157d5;--green:#147d57;--red:#b93838;--gold:#f0c75e}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(125deg,#18284e,#3157d5);color:white;padding:32px 20px}
+header .wrap,main{max-width:1000px;margin:auto}h1{margin:0 0 8px;font-size:clamp(1.7rem,4vw,2.6rem)}header p{margin:0;color:#e0e7ff}
+main{padding:22px 16px 50px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+button,select,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:10px 15px;font-weight:650}
+.tab{background:#e3e9f6;color:#253454}.tab.active{background:var(--blue);color:#fff}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,26px);box-shadow:0 8px 24px #1a2b4a0a}
+.hidden{display:none!important}.muted{color:var(--muted)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.space{justify-content:space-between}
+.pill{background:#edf2ff;color:#2947a6;padding:4px 10px;border-radius:999px;font-size:.85rem}
+.cardstage{perspective:1000px;margin:20px auto;max-width:650px}
+.flashcard{height:260px;position:relative;transform-style:preserve-3d;transition:transform .45s;cursor:pointer}
+.flashcard.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px;background:linear-gradient(145deg,#fff,#f4f7ff)}
+.face.back{transform:rotateY(180deg);background:linear-gradient(145deg,#f0fff7,#fff)}
+.face small{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;margin-bottom:15px}
+.face strong{font-size:clamp(1.35rem,4vw,2rem)}.face p{max-width:500px;margin:12px 0 0;color:#40506a}
+.controls{justify-content:center;margin:12px 0}.primary{background:var(--blue);color:#fff}.secondary{background:#e8edf6;color:#24314c}.success{background:#e1f6ec;color:#126647}.danger{background:#fde9e9;color:#9e2525}
+.progress{height:8px;background:#e7ecf5;border-radius:99px;overflow:hidden;margin:14px 0}.progress span{display:block;height:100%;background:var(--blue);width:0;transition:width .2s}
+label{display:block;font-weight:650;margin:12px 0 6px}select,input[type=text]{width:100%;max-width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;background:white}
+.question{font-size:1.15rem;font-weight:750;margin:8px 0 16px}.options{display:grid;gap:9px}.option{text-align:left;background:#f6f8fc;border:1px solid var(--line);color:var(--ink);font-weight:500}.option:hover{border-color:#8097e8}.option.correct{background:#e1f6ec;border-color:#59b88c}.option.wrong{background:#fde9e9;border-color:#e69b9b}
+.feedback{min-height:28px;margin:12px 0;font-weight:650}.score{font-size:1.1rem;font-weight:750}.exercise-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+textarea{width:100%;min-height:100px;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+details{margin-top:15px}summary{cursor:pointer;font-weight:700}.small{font-size:.9rem}
+footer{text-align:center;padding:10px 20px 30px;color:var(--muted)}
+@media(max-width:520px){.flashcard{height:235px}.panel{border-radius:14px}.controls button{flex:1}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Die Wirkung der Farben</h1>
+<p>German vocabulary practice · Flashcards, multiple choice, idioms, and sentence completion</p>
+</div></header>
+<main>
+<div class="tabs" role="tablist">
+<button class="tab active" data-tab="cards">📇 Flashcards</button>
+<button class="tab" data-tab="quiz">🧠 Multiple choice</button>
+<button class="tab" data-tab="fill">✍️ Fill in the blank</button>
+<button class="tab" data-tab="idioms">🌿 Idioms</button>
+</div>
+
+<section id="cards" class="panel">
+<div class="row space"><div><h2 style="margin:0">Flashcards</h2><p class="muted" style="margin:4px 0">Try to recall the meaning before revealing the answer.</p></div>
+<select id="category" aria-label="Choose flashcard category" style="width:auto;max-width:100%">
+<option value="all">All vocabulary</option><option value="Verbs">Verbs</option><option value="Nouns">Nouns</option><option value="Expressions">Verb expressions</option><option value="Phrases">Academic phrases</option><option value="Idioms">Idioms</option>
+</select></div>
+<div class="progress"><span id="cardProgress"></span></div>
+<div class="row space small muted"><span id="cardCount">Card 1</span><span>Click the card to flip</span></div>
+<div class="cardstage"><div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="Flashcard, click to reveal answer">
+<div class="face front"><small id="cardCategory">Vocabulary</small><strong id="frontText"></strong><p id="frontHint">What does this mean?</p></div>
+<div class="face back"><small>Answer</small><strong id="backText"></strong><p id="backExample"></p></div>
+</div></div>
+<div class="row controls">
+<button class="secondary" id="prevCard">← Previous</button><button class="primary" id="flipCard">Reveal answer</button><button class="secondary" id="nextCard">Next →</button>
+</div>
+<div class="row controls"><button class="success" id="known">✓ I knew it</button><button class="danger" id="review">↻ Review again</button><button class="secondary" id="shuffle">Shuffle</button></div>
+<p class="muted small" style="text-align:center">Known: <strong id="knownCount">0</strong> · Review again: <strong id="reviewCount">0</strong></p>
+</section>
+
+<section id="quiz" class="panel hidden">
+<div class="exercise-head"><div><h2 style="margin:0">Multiple-choice quiz</h2><p class="muted" style="margin:4px 0">Choose the best English meaning.</p></div><span class="pill" id="quizCounter">Question 1 of 10</span></div>
+<div class="progress"><span id="quizProgress"></span></div>
+<div id="quizQuestion" class="question"></div><div id="quizOptions" class="options"></div>
+<div id="quizFeedback" class="feedback" aria-live="polite"></div>
+<div class="row space"><span class="score" id="quizScore">Score: 0</span><button class="primary" id="nextQuestion" disabled>Next question →</button></div>
+<button class="secondary hidden" id="restartQuiz" style="margin-top:14px">Try quiz again</button>
+</section>
+
+<section id="fill" class="panel hidden">
+<h2 style="margin-top:0">Fill in the blank</h2><p class="muted">Type the missing German word or expression. Capitalization is ignored.</p>
+<div class="exercise-head"><span class="pill" id="fillCounter">Question 1 of 8</span><span class="score" id="fillScore">Score: 0</span></div>
+<div class="progress"><span id="fillProgress"></span></div>
+<div id="fillPrompt" class="question"></div>
+<form id="fillForm"><label for="fillAnswer">Your answer</label><input id="fillAnswer" type="text" autocomplete="off" placeholder="Type in German…" required>
+<div class="row" style="margin-top:14px"><button class="primary" type="submit">Check answer</button><button class="secondary" type="button" id="showFill">Show answer</button><button class="secondary hidden" type="button" id="nextFill">Next →</button></div></form>
+<div id="fillFeedback" class="feedback" aria-live="polite"></div>
+</section>
+
+<section id="idioms" class="panel hidden">
+<h2 style="margin-top:0">Idioms: Grün & Blau</h2><p class="muted">Match the figurative German expression to its meaning. These phrases should be learned as complete expressions.</p>
+<label for="idiomSelect">Choose an idiom</label><select id="idiomSelect"></select>
+<div style="margin:16px 0;padding:18px;background:#f6f8fc;border-radius:12px"><div class="muted small">Meaning</div><div id="idiomMeaning" class="question" style="margin-bottom:0">Select an idiom above.</div></div>
+<div class="row"><button class="primary" id="randomIdiom">Random idiom</button><button class="secondary" id="idiomExample">Show example</button></div><p id="idiomExampleText" class="muted"></p>
+<details><summary>Quick idiom challenge</summary><p>Complete the meanings from memory:</p><ul><li><em>grün hinter den Ohren sein</em> = …</li><li><em>blau machen</em> = …</li><li><em>jemandem grünes Licht geben</em> = …</li><li><em>sein blaues Wunder erleben</em> = …</li><li><em>einen grünen Daumen haben</em> = …</li></ul></details>
+</section>
+
+<section class="panel" style="margin-top:18px">
+<h2 style="margin-top:0">Study tip</h2>
+<p>Learn verbs together with their cases and prepositions (for example, <em>jemandem widersprechen</em>), nouns with their articles and plurals, and idioms as complete expressions. After each card, try making your own German sentence.</p>
+</section>
+</main>
+<footer>Based on your study list “Important German Vocabulary: Die Wirkung der Farben”.</footer>
+<script>
+const cards = [
+["Verbs","befragen (+ Akk.)","to survey / question","Die Forscherin befragte 586 Studenten."],
+["Verbs","widersprechen (+ Dat.)","to contradict","Die Studie widerspricht der Annahme."],
+["Verbs","jemandem etwas zuschreiben","to attribute something to someone/something","Psychologen schreiben Blau eine Wirkung zu."],
+["Verbs","wirken","to seem / have an effect","Blau wirkt auf Leser seriöser."],
+["Verbs","sich herausstellen","to turn out","Es stellte sich heraus, dass Grün hilfreich sein könnte."],
+["Verbs","sich durch etwas auszeichnen","to stand out for something","Die Probanden zeichneten sich durch Einfallsreichtum aus."],
+["Verbs","lösen (+ Akk.)","to solve","Die Probanden mussten Aufgaben lösen."],
+["Verbs","entwickeln","to develop","Sie entwickelten originelle Ideen."],
+["Verbs","teilnehmen an (+ Dat.)","to participate in","Viele Studenten nehmen am Experiment teil."],
+["Verbs","stattfinden","to take place","Das Experiment findet im Labor statt."],
+["Nouns","die Wirkung, -en","effect, impact","Die Wirkung der Farbe wird untersucht."],
+["Nouns","die Lieblingsfarbe, -n","favourite colour","Viele nannten Blau als Lieblingsfarbe."],
+["Nouns","die Nachdenklichkeit","thoughtfulness","An abstract noun describing a quality."],
+["Nouns","die Ausgeglichenheit","emotional balance, composure","Ein abstraktes Nomen."],
+["Nouns","die Empathie","empathy","Psychologen untersuchen menschliche Eigenschaften."],
+["Nouns","die Studie, -n","study","Die Studie widerspricht der Annahme."],
+["Nouns","das Experiment, -e","experiment","Die Teilnehmer nehmen am Experiment teil."],
+["Nouns","der Proband / die Probandin","test subject, participant","Die Probanden lösten Aufgaben."],
+["Nouns","die Kreativität","creativity","Grün könnte die Kreativität fördern."],
+["Nouns","der Einfallsreichtum","inventiveness, ingenuity","Sie entwickelten originelle Ideen."],
+["Nouns","die Konservendose, -n","tin can","Was kann man mit einer Dose machen?"],
+["Nouns","die Kontrollgruppe, -n","control group","Die Kontrollgruppe dient dem Vergleich."],
+["Nouns","das Ergebnis, -se","result","Die Ergebnisse zeigen einen Unterschied."],
+["Nouns","das Wachstum","growth","Wo es grünt, da ist Wachstum."],
+["Expressions","sich etwas ansehen","to look at something","Die Testpersonen sahen sich grüne Flächen an."],
+["Expressions","auf etwas folgen","to follow something","Rot folgte auf Platz zwei."],
+["Expressions","eine Aufgabe lösen","to solve a task","Die Probanden mussten Aufgaben lösen."],
+["Expressions","Ideen entwickeln","to develop / come up with ideas","Die Teilnehmer entwickeln originelle Ideen."],
+["Expressions","etwas in Betracht ziehen","to consider something","Man sollte verschiedene Erklärungen in Betracht ziehen."],
+["Expressions","von etwas ausgehen","to assume / proceed from something","Die Forscher gehen von einer Annahme aus."],
+["Expressions","zu einem Ergebnis kommen","to reach a result","Die Forscher kamen zu einem Ergebnis."],
+["Expressions","einen Versuch durchführen","to conduct an experiment","Die Forscher führten einen Versuch durch."],
+["Phrases","angeblich","allegedly; supposedly","Blau macht angeblich kreativer."],
+["Phrases","womöglich","possibly; perhaps","Grün könnte womöglich die Kreativität fördern."],
+["Phrases","tatsächlich","actually; in fact","Tatsächlich entwickelten die Teilnehmer originellere Ideen."],
+["Phrases","allerdings","however; admittedly","Eine neuere Studie widerspricht allerdings dieser Annahme."],
+["Phrases","im Gegensatz zu","in contrast to","Im Gegensatz zu Blau …"],
+["Phrases","im Folgenden","in the following","Im Folgenden werden die Ergebnisse erklärt."],
+["Phrases","eine Annahme infrage stellen","to question an assumption","Eine Studie kann eine Annahme infrage stellen."],
+["Phrases","ein Symbol für etwas sein","to be a symbol of something","Grün kann ein Symbol für Wachstum sein."],
+["Idioms","grün hinter den Ohren sein","to be inexperienced; wet behind the ears","Der neue Mitarbeiter ist noch grün hinter den Ohren."],
+["Idioms","jemandem grünes Licht geben","to give someone the green light; approve","Die Universität hat dem Forschungsprojekt grünes Licht gegeben."],
+["Idioms","alles ist im grünen Bereich","everything is fine / within acceptable limits","Nach der Prüfung war alles im grünen Bereich."],
+["Idioms","einen grünen Daumen haben","to be good at gardening","Meine Mutter hat einen grünen Daumen."],
+["Idioms","auf keinen grünen Zweig kommen","to get nowhere; fail to make progress","Trotz vieler Versuche kam das Unternehmen auf keinen grünen Zweig."],
+["Idioms","grün vor Neid werden","to turn green with envy","Er wurde grün vor Neid."],
+["Idioms","blau machen","to skip work or school without a valid reason","Er hat gestern blau gemacht."],
+["Idioms","blauäugig sein","to be naive; overly trusting","Es war blauäugig, dem Fremden sofort zu vertrauen."],
+["Idioms","mit einem blauen Auge davonkommen","to get off lightly","Die Firma kam mit einem blauen Auge davon."],
+["Idioms","sein blaues Wunder erleben","to get a nasty surprise","Wenn du die Warnung ignorierst, wirst du dein blaues Wunder erleben."],
+["Idioms","jemandem das Blaue vom Himmel versprechen","to promise someone the moon","Der Verkäufer versprach dem Kunden das Blaue vom Himmel."],
+["Idioms","ins Blaue fahren","to set off without a fixed destination","Am Wochenende fahren wir einfach ins Blaue."]
+];
+let deck=[...cards], index=0, flipped=false, known=new Set(), review=new Set();
+const $=id=>document.getElementById(id);
+function renderCard(){if(!deck.length)return;let c=deck[index];$("flashcard").classList.toggle("flipped",flipped);$("frontText").textContent=c[1];$("frontHint").textContent=flipped?"":"What does this mean?";$("cardCategory").textContent=c[0];$("backText").textContent=c[2];$("backExample").textContent=c[3];$("cardCount").textContent=`Card ${index+1} of ${deck.length}`;$("cardProgress").style.width=`${((index+1)/deck.length)*100}%`;$("knownCount").textContent=known.size;$("reviewCount").textContent=review.size;$("flipCard").textContent=flipped?"Show question":"Reveal answer";}
+function flip(){flipped=!flipped;renderCard()}
+$("flashcard").addEventListener("click",flip);$("flashcard").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}});
+$("flipCard").onclick=flip;$("prevCard").onclick=()=>{index=(index-1+deck.length)%deck.length;flipped=false;renderCard()};$("nextCard").onclick=()=>{index=(index+1)%deck.length;flipped=false;renderCard()};
+$("known").onclick=()=>{known.add(deck[index][1]);review.delete(deck[index][1]);advanceCard()};$("review").onclick=()=>{review.add(deck[index][1]);known.delete(deck[index][1]);advanceCard()};
+function advanceCard(){if(index<deck.length-1)index++;else index=0;flipped=false;renderCard()}
+$("shuffle").onclick=()=>{deck.sort(()=>Math.random()-.5);index=0;flipped=false;renderCard()};
+$("category").onchange=()=>{let v=$("category").value;deck=v==="all"?[...cards]:cards.filter(c=>c[0]===v);index=0;flipped=false;renderCard()};renderCard();
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll("main section[id]").forEach(s=>s.classList.toggle("hidden",s.id!==b.dataset.tab));});
+const questions=[
+["Was bedeutet „sich herausstellen“?","to turn out",["to take part","to contradict"]],
+["Was bedeutet „widersprechen“?","to contradict",["to develop","to survey"]],
+["Was bedeutet „die Wirkung“?","effect, impact",["growth","vote"]],
+["Was bedeutet „Einfallsreichtum“?","inventiveness, ingenuity",["empathy","control group"]],
+["Was bedeutet „womöglich“?","possibly; perhaps",["in the following","actually; in fact"]],
+["Was bedeutet „blau machen“?","to skip work or school without a valid reason",["to be naive","to give approval"]],
+["Was bedeutet „einen grünen Daumen haben“?","to be good at gardening",["to be inexperienced","to be furious"]],
+["Was bedeutet „im Gegensatz zu“?","in contrast to",["above all","shortly before"]],
+["Was bedeutet „an etwas teilnehmen“?","to participate in",["to examine","to follow"]],
+["Was bedeutet „eine Annahme infrage stellen“?","to question an assumption",["to confirm a result","to conduct a study"]],
+["Was bedeutet „mit einem blauen Auge davonkommen“?","to get off lightly",["to get a nasty surprise","to get nowhere"]],
+["Was bedeutet „jemandem grünes Licht geben“?","to give someone the green light; approve",["to praise excessively","to turn green with envy"]]
+];
+let qOrder=[],qIndex=0,qScore=0,qAnswered=false;
+function startQuiz(){qOrder=[...questions].sort(()=>Math.random()-.5).slice(0,10);qIndex=0;qScore=0;renderQuiz()}
+function renderQuiz(){qAnswered=false;$("quizFeedback").textContent="";$("nextQuestion").disabled=true;$("restartQuiz").classList.add("hidden");if(qIndex>=qOrder.length){$("quizQuestion").textContent=`Finished! You scored ${qScore} out of ${qOrder.length}.`;$("quizOptions").innerHTML="";$("quizCounter").textContent="Complete";$("quizProgress").style.width="100%";$("quizScore").textContent=`Score: ${qScore} / ${qOrder.length}`;$("nextQuestion").classList.add("hidden");$("restartQuiz").classList.remove("hidden");return}
+$("nextQuestion").classList.remove("hidden");let q=qOrder[qIndex];$("quizCounter").textContent=`Question ${qIndex+1} of ${qOrder.length}`;$("quizProgress").style.width=`${qIndex/qOrder.length*100}%`;$("quizQuestion").textContent=q[0];$("quizScore").textContent=`Score: ${qScore}`;let opts=[q[1],...q[2]].sort(()=>Math.random()-.5);$("quizOptions").innerHTML="";opts.forEach(o=>{let b=document.createElement("button");b.className="option";b.textContent=o;b.onclick=()=>answerQuiz(b,o,q[1]);$("quizOptions").appendChild(b)})}
+function answerQuiz(btn,choice,correct){if(qAnswered)return;qAnswered=true;document.querySelectorAll("#quizOptions button").forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add("correct")});if(choice===correct){qScore++;$("quizFeedback").textContent="Correct! ✓";$("quizFeedback").style.color="var(--green)"}else{btn.classList.add("wrong");$("quizFeedback").textContent=`Not quite. Correct answer: ${correct}`;$("quizFeedback").style.color="var(--red)"}$("quizScore").textContent=`Score: ${qScore}`;$("nextQuestion").disabled=false;$("quizProgress").style.width=`${(qIndex+1)/qOrder.length*100}%`}
+$("nextQuestion").onclick=()=>{qIndex++;renderQuiz()};$("restartQuiz").onclick=startQuiz;startQuiz();
+
+const fills=[
+["Die neue Studie ______ der bisherigen Theorie.","widerspricht","widerspricht"],
+["Es stellte sich ______, dass Grün hilfreich sein könnte.","heraus","heraus"],
+["Die Teilnehmer entwickelten originelle ______.","Ideen","ideen"],
+["Die Forscherin ______ 586 Studenten.","befragte","befragte"],
+["Grün könnte womöglich die Kreativität ______.","fördern","fördern"],
+["Die Universität hat dem Projekt grünes ______ gegeben.","Licht","licht"],
+["Die Kreativität ______ zu.","nimmt","nimmt"],
+["Der neue Mitarbeiter ist noch grün hinter den ______.","Ohren","ohren"]
+];let fIndex=0,fScore=0,fChecked=false;
+function renderFill(){$("fillCounter").textContent=`Question ${Math.min(fIndex+1,fills.length)} of ${fills.length}`;$("fillProgress").style.width=`${fIndex/fills.length*100}%`;$("fillPrompt").textContent=fIndex>=fills.length?`Finished! You scored ${fScore} out of ${fills.length}.`:`${fIndex+1}. ${fills[fIndex][0]}`;$("fillAnswer").value="";$("fillAnswer").disabled=fIndex>=fills.length;$("fillFeedback").textContent="";$("showFill").classList.toggle("hidden",fIndex>=fills.length);$("nextFill").classList.add("hidden");$("fillScore").textContent=`Score: ${fScore}`;if(fIndex>=fills.length){$("fillForm").classList.add("hidden")}else{$("fillForm").classList.remove("hidden");$("fillAnswer").focus()}}
+function checkFill(show=false){if(fIndex>=fills.length||fChecked)return;fChecked=true;let correct=fills[fIndex][1],value=$("fillAnswer").value.trim();if(!show&&value.toLowerCase()===correct.toLowerCase()){fScore++;$("fillFeedback").textContent="Correct! ✓";$("fillFeedback").style.color="var(--green)"}else{$("fillFeedback").textContent=`Answer: ${correct}`;$("fillFeedback").style.color=show?"var(--muted)":"var(--red)"}$("fillScore").textContent=`Score: ${fScore}`;$("fillAnswer").disabled=true;$("showFill").classList.add("hidden");$("nextFill").classList.remove("hidden");$("fillProgress").style.width=`${(fIndex+1)/fills.length*100}%`}
+$("fillForm").onsubmit=e=>{e.preventDefault();checkFill()};$("showFill").onclick=()=>checkFill(true);$("nextFill").onclick=()=>{fIndex++;fChecked=false;if(fIndex>=fills.length){$("fillPrompt").textContent=`Finished! You scored ${fScore} out of ${fills.length}.`; $("fillForm").classList.add("hidden");$("fillProgress").style.width="100%";$("fillCounter").textContent="Complete";$("fillFeedback").innerHTML=`<button class="primary" onclick="location.reload()">Restart practice</button>`}else renderFill()};renderFill();
+
+const idioms=cards.filter(c=>c[0]==="Idioms");idioms.forEach((c,i)=>{let o=document.createElement("option");o.value=i;o.textContent=c[1];$("idiomSelect").appendChild(o)});
+function showIdiom(){let c=idioms[+$("idiomSelect").value];$("idiomMeaning").textContent=c[2];$("idiomExampleText").textContent=""}
+$("idiomSelect").onchange=showIdiom;$("randomIdiom").onclick=()=>{$("idiomSelect").value=Math.floor(Math.random()*idioms.length);showIdiom()};$("idiomExample").onclick=()=>{$("idiomExampleText").textContent=idioms[+$("idiomSelect").value][3]};showIdiom();
+</script>
+</body>
+</html>

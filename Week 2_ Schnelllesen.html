@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>German B2–C1 Vocabulary: Flashcards & Exercises</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#657087;--accent:#4659d9;--accent2:#e9ecff;--good:#147a4b;--bad:#b42318;--line:#dfe4ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#252f79,#5969e8);color:white;padding:32px 20px}
+header .wrap,main{max-width:950px;margin:auto}h1{margin:0 0 8px;font-size:clamp(1.6rem,4vw,2.4rem)}header p{margin:0;color:#eef0ff}
+main{padding:22px 16px 48px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+button,select,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 15px;background:var(--accent);color:white;font-weight:650}
+button.secondary{background:var(--accent2);color:var(--accent)}button:disabled{opacity:.45;cursor:not-allowed}
+.tab{background:white;color:var(--muted);border:1px solid var(--line)}.tab.active{background:var(--accent);color:white}
+.panel{display:none}.panel.active{display:block}.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 5px 18px #25305b0a}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.93rem}
+.flashcard{min-height:245px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;margin:16px 0;background:linear-gradient(145deg,#fff,#f5f6ff);border:1px solid var(--line);border-radius:16px;padding:26px;cursor:pointer}
+.flashcard .hint{color:var(--muted);font-size:.9rem;margin-bottom:12px}.flashcard .word{font-size:clamp(1.6rem,5vw,2.35rem);font-weight:800}.flashcard .answer{font-size:1.25rem;margin-top:12px}.flashcard .example{color:var(--muted);margin-top:12px}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}.progress{height:7px;background:#e6e9f2;border-radius:99px;overflow:hidden;margin-top:14px}.progress span{display:block;height:100%;background:var(--accent);width:0}
+.question{padding:17px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.question p{margin:0 0 10px;font-weight:650}
+.options{display:grid;gap:8px}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:white;cursor:pointer}.option:has(input:checked){border-color:var(--accent);background:#f4f5ff}
+input[type=text]{width:100%;max-width:450px;padding:10px;border:1px solid #cbd2e2;border-radius:9px;background:white}
+.feedback{margin-top:8px;font-size:.94rem}.correct{color:var(--good);font-weight:650}.incorrect{color:var(--bad);font-weight:650}
+.score{font-size:1.1rem;font-weight:750;margin:14px 0}.small{color:var(--muted);font-size:.9rem}
+select{padding:8px;border:1px solid var(--line);border-radius:9px;background:white}
+@media(max-width:600px){.box{padding:14px}.flashcard{min-height:220px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>German Vocabulary Trainer</h1><p>B2–C1 · Flashcards, grammar patterns and practice exercises</p></div></header>
+<main>
+<div class="tabs" role="tablist">
+<button class="tab active" data-tab="cards">Flashcards</button>
+<button class="tab" data-tab="quiz">Multiple choice</button>
+<button class="tab" data-tab="fill">Fill in the blanks</button>
+<button class="tab" data-tab="grammar">Grammar practice</button>
+</div>
+<section id="cards" class="panel active">
+<div class="box">
+<div class="topline"><span id="cardCount">Card 1 of 12</span><label>Category <select id="category"><option value="all">All vocabulary</option><option value="verb">Verbs</option><option value="noun">Nouns</option><option value="expression">Expressions</option></select></label></div>
+<div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Reveal flashcard answer"><div class="hint">Tap or click to reveal</div><div class="word" id="front"></div><div class="answer" id="back" hidden></div><div class="example" id="example" hidden></div></div>
+<div class="actions"><button class="secondary" id="prev">← Previous</button><button id="reveal">Show answer</button><button class="secondary" id="next">Next →</button></div>
+<div class="progress"><span id="progressBar"></span></div><p class="small">Tip: try to recall the meaning before revealing the answer.</p>
+</div></section>
+<section id="quiz" class="panel"><div class="box"><h2>Choose the correct meaning</h2><p class="small">Select one answer for each question, then check your score.</p><div id="quizQuestions"></div><button id="checkQuiz">Check answers</button> <button class="secondary" id="resetQuiz">Reset</button><div id="quizResult" class="score" aria-live="polite"></div></div></section>
+<section id="fill" class="panel"><div class="box"><h2>Complete the German expression</h2><p class="small">Type the missing word or phrase. Capitalization is ignored.</p><div id="fillQuestions"></div><button id="checkFill">Check answers</button> <button class="secondary" id="resetFill">Reset</button><div id="fillResult" class="score" aria-live="polite"></div></div></section>
+<section id="grammar" class="panel"><div class="box"><h2>Grammar and usage</h2><p class="small">Choose the grammatically correct completion.</p><div id="grammarQuestions"></div><button id="checkGrammar">Check answers</button> <button class="secondary" id="resetGrammar">Reset</button><div id="grammarResult" class="score" aria-live="polite"></div></div></section>
+</main>
+<script>
+const cards=[
+{cat:"verb",front:"bewältigen",back:"to manage, cope with, handle",example:"Viele Menschen müssen große Datenmengen bewältigen."},
+{cat:"verb",front:"erleichtern",back:"to make easier; facilitate",example:"Diese Technik erleichtert das Lesen."},
+{cat:"verb",front:"beschleunigen",back:"to accelerate; speed up",example:"Das Schnelllesen soll den Leseprozess beschleunigen."},
+{cat:"verb",front:"beruhen auf + Dativ",back:"to be based on something",example:"Herkömmliches Lesen beruht auf dem inneren Mitsprechen."},
+{cat:"verb",front:"etwas auslösen",back:"to trigger; set something off",example:"Die Fingerbewegung löst eine Nervenaktivität aus."},
+{cat:"verb",front:"sich einen Überblick über + Akk. verschaffen",back:"to gain an overview of something",example:"Man kann sich einen Überblick über den Text verschaffen."},
+{cat:"verb",front:"sich etwas beibringen",back:"to teach oneself something",example:"sich Schnelllesen selbst beibringen"},
+{cat:"verb",front:"sich etwas einhandeln",back:"to bring something unpleasant upon oneself",example:"Man kann sich Lesestörungen einhandeln."},
+{cat:"noun",front:"die Datenmenge (Plural: Datenmengen)",back:"amount of data",example:"große Datenmengen bewältigen"},
+{cat:"noun",front:"das Lesetempo (Plural: Lesetempi)",back:"reading speed",example:"Das Lesetempo kann sich steigern."},
+{cat:"noun",front:"die Subvokalisierung",back:"subvocalization; inner speech while reading",example:"Die Subvokalisierung bewusst ausschalten."},
+{cat:"noun",front:"die Konzentration",back:"concentration",example:"mangelnde Konzentration"},
+{cat:"expression",front:"zur Verfügung stehen",back:"to be available",example:"Viele Informationen stehen zur Verfügung."},
+{cat:"expression",front:"sowohl … als auch …",back:"both … and …",example:"sowohl auf Papier als auch am Bildschirm"},
+{cat:"expression",front:"einem Experten zufolge",back:"according to an expert",example:"Einem Experten zufolge ist das Lesetempo begrenzt."},
+{cat:"expression",front:"an etwas liegen",back:"to be due to something",example:"Das liegt an der hohen Informationsmenge."}
+];
+const quiz=[
+{q:'What does “bewältigen” mean?',o:['to manage / cope with','to switch off','to accompany','to double'],a:0},
+{q:'“die Datenmenge” means…',o:['reading disorder','amount of data','concentration','index finger'],a:1},
+{q:'Which expression means “to be based on”?',o:['zur Verfügung stehen','sich etwas einhandeln','auf etwas beruhen','etwas auslösen'],a:2},
+{q:'“eine Nervenaktivität auslösen” means…',o:['to reduce concentration','to trigger neural activity','to gain an overview','to read aloud'],a:1},
+{q:'What does “sich einen Überblick verschaffen” mean?',o:['to teach oneself','to speed up','to gain an overview','to double'],a:2},
+{q:'“die Leseunlust” means…',o:['reluctance to read','reading speed','volume','training'],a:0},
+{q:'Which means “to make something easier”?',o:['beschleunigen','erleichtern','bewältigen','steigen'],a:1},
+{q:'“zur Verfügung stehen” means…',o:['to be available','to be based on','to arise','to switch off'],a:0}
+];
+const fill=[
+{q:'Viele Menschen müssen große Datenmengen ________. (to manage)',a:['bewältigen']},
+{q:'Diese Technik ________ das Lesen. (makes easier)',a:['erleichtert']},
+{q:'Herkömmliches Lesen ________ auf dem inneren Mitsprechen. (is based)',a:['beruht']},
+{q:'Die Fingerbewegung ________ eine Nervenaktivität ________. (triggers)',a:['löst','aus']},
+{q:'Man kann sich einen Überblick ________ den Text verschaffen. (about)',a:['über']},
+{q:'Viele Informationen stehen zur ________. (available)',a:['verfügung','verfuegung']},
+{q:'Das liegt ________ der hohen Informationsmenge. (due to)',a:['an']},
+{q:'Die Methode funktioniert sowohl auf Papier ________ am Bildschirm. (and)',a:['als auch']}
+];
+const grammar=[
+{q:'Die Methode beruht ___ intensivem Training.',o:['auf','an','über','für'],a:0},
+{q:'Er verschafft sich einen Überblick ___ den Text.',o:['auf','über','mit','bei'],a:1},
+{q:'Der Lehrer bringt den Studierenden eine Technik ___.',o:['an','bei','aus','auf'],a:1},
+{q:'Man handelt sich Probleme ___.',o:['ein','aus','bei','über'],a:0},
+{q:'Die Bewegung löst eine Reaktion ___.',o:['an','ein','aus','bei'],a:2},
+{q:'___ Experten zufolge ist das Lesetempo begrenzt.',o:['Einem','Einen','Eines','Einer'],a:0},
+{q:'Die Methode funktioniert sowohl auf Papier ___ am Bildschirm.',o:['sondern','als auch','trotzdem','weil'],a:1},
+{q:'Sie konzentriert sich ___ den Text.',o:['über','an','auf','mit'],a:2}
+];
+let idx=0,showing=false;
+const $=id=>document.getElementById(id);
+function filtered(){return cards.filter(c=>$('category').value==='all'||c.cat===$('category').value)}
+function renderCard(){let list=filtered();if(idx>=list.length)idx=0;if(idx<0)idx=list.length-1;let c=list[idx];$('cardCount').textContent=`Card ${idx+1} of ${list.length}`;$('front').textContent=c.front;$('back').textContent=c.back;$('example').textContent=c.example;$('back').hidden=!showing;$('example').hidden=!showing;$('reveal').textContent=showing?'Hide answer':'Show answer';$('progressBar').style.width=`${(idx+1)/list.length*100}%`}
+function flip(){showing=!showing;renderCard()}
+$('flashcard').addEventListener('click',flip);$('flashcard').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
+$('reveal').onclick=flip;$('prev').onclick=()=>{idx--;showing=false;renderCard()};$('next').onclick=()=>{idx++;showing=false;renderCard()};$('category').onchange=()=>{idx=0;showing=false;renderCard()};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))});
+function buildChoices(target,data,prefix){$(target).innerHTML=data.map((q,i)=>`<div class="question" data-i="${i}"><p>${i+1}. ${q.q}</p><div class="options">${q.o.map((o,j)=>`<label class="option"><input type="radio" name="${prefix}${i}" value="${j}"> ${o}</label>`).join('')}</div><div class="feedback" id="${prefix}fb${i}"></div></div>`).join('')}
+function checkChoices(data,prefix,result){let score=0;data.forEach((q,i)=>{let chosen=document.querySelector(`input[name="${prefix}${i}"]:checked`);let fb=$(`${prefix}fb${i}`);if(chosen&&+chosen.value===q.a){score++;fb.className='feedback correct';fb.textContent='Correct!'}else{fb.className='feedback incorrect';fb.textContent='Correct answer: '+q.o[q.a]}});$(result).textContent=`Score: ${score} / ${data.length}`}
+function resetChoices(data,prefix,result,target){buildChoices(target,data,prefix);$(result).textContent=''}
+buildChoices('quizQuestions',quiz,'q');buildChoices('grammarQuestions',grammar,'g');
+$('checkQuiz').onclick=()=>checkChoices(quiz,'q','quizResult');$('resetQuiz').onclick=()=>resetChoices(quiz,'q','quizResult','quizQuestions');
+$('checkGrammar').onclick=()=>checkChoices(grammar,'g','grammarResult');$('resetGrammar').onclick=()=>resetChoices(grammar,'g','grammarResult','grammarQuestions');
+function buildFill(){ $('fillQuestions').innerHTML=fill.map((q,i)=>`<div class="question"><p>${i+1}. ${q.q}</p><input type="text" id="f${i}" autocomplete="off" aria-label="Answer ${i+1}"><div class="feedback" id="ffb${i}"></div></div>`).join('')}
+function norm(s){return s.toLowerCase().trim().replace(/[.!?]/g,'').replace(/\s+/g,' ')}
+$('checkFill').onclick=()=>{let score=0;fill.forEach((q,i)=>{let val=norm($('f'+i).value);let answers=q.a.map(norm);let ok=answers.includes(val);if(ok)score++;let fb=$('ffb'+i);fb.className='feedback '+(ok?'correct':'incorrect');fb.textContent=ok?'Correct!':'Expected: '+q.a[0]});$('fillResult').textContent=`Score: ${score} / ${fill.length}`};
+$('resetFill').onclick=()=>{buildFill();$('fillResult').textContent=''};buildFill();renderCard();
+</script>
+</body>
+</html>

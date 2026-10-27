@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>So streiten Sie richtig! – Interaktive Übungen</title>
+<style>
+  body{font-family:Arial,sans-serif;line-height:1.5;max-width:1000px;margin:auto;padding:20px;background:#f5f7fb;color:#222}
+  h1{color:#17365d}.card{background:white;border-radius:14px;padding:22px;margin:18px 0;box-shadow:0 2px 10px #0001}
+  .q{margin:18px 0;padding:15px;background:#fafafa;border-left:4px solid #4776a8}
+  button{background:#17365d;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;margin:5px 3px}
+  button:hover{opacity:.9}.option{display:block;margin:8px 0;padding:8px;border:1px solid #ddd;border-radius:7px;cursor:pointer}
+  input,select{padding:8px;border:1px solid #bbb;border-radius:6px;font-size:1rem}
+  .correct{background:#d9f2df!important;border-color:#3a9952!important}.wrong{background:#fde0e0!important;border-color:#c33!important}
+  .feedback{font-weight:bold;margin-top:8px}.score{font-size:1.2rem;font-weight:bold;color:#17365d}
+  .phrase{font-weight:bold;color:#7a3e00}.small{color:#666;font-size:.92rem}
+</style>
+</head>
+<body>
+<h1>🇩🇪 So streiten Sie richtig! – Interaktive Übungen</h1>
+<p><b>Niveau:</b> B1–B2 | <b>Thema:</b> Konflikte, Kommunikation und Problemlösung</p>
+<p class="small">Làm bài trực tiếp trên trang. Nhấn “Kiểm tra” ở từng phần để xem đáp án và điểm.</p>
+
+<div class="card">
+<h2>1. Wortschatz – Chọn nghĩa đúng</h2>
+<div id="vocab"></div>
+<button onclick="checkVocab()">Kiểm tra</button>
+<span id="vocabScore" class="score"></span>
+</div>
+
+<div class="card">
+<h2>2. Lückentext – Điền từ</h2>
+<p class="small">Từ gợi ý: <i>Vorwurf – Konfliktlösung – Gegenüber – Anspannung – zuhören – Kompromiss – entschuldigen – Resümee</i></p>
+<div id="gap"></div>
+<button onclick="checkGap()">Kiểm tra</button>
+<span id="gapScore" class="score"></span>
+</div>
+
+<div class="card">
+<h2>3. Grammatik – Chọn cấu trúc đúng</h2>
+<div id="grammar"></div>
+<button onclick="checkGrammar()">Kiểm tra</button>
+<span id="grammarScore" class="score"></span>
+</div>
+
+<div class="card">
+<h2>4. Richtig oder falsch?</h2>
+<div id="tf"></div>
+<button onclick="checkTF()">Kiểm tra</button>
+<span id="tfScore" class="score"></span>
+</div>
+
+<div class="card">
+<h2>5. Redemittel – Ghép cụm từ</h2>
+<p>Nối phần đầu với phần cuối để tạo thành cụm/câu tự nhiên.</p>
+<div id="match"></div>
+<button onclick="checkMatch()">Kiểm tra</button>
+<span id="matchScore" class="score"></span>
+</div>
+
+<div class="card">
+<h2>6. Mini-Schreibaufgabe</h2>
+<p>Viết 4–6 câu bằng tiếng Đức: <b>Wie sollte man bei einem Streit reagieren?</b></p>
+<textarea id="writing" rows="7" style="width:100%;padding:10px;border-radius:8px;border:1px solid #bbb"></textarea>
+<p class="small">Gợi ý: <i>ruhig bleiben, beim Thema bleiben, zuhören, Ich-Botschaften, Kompromiss, sich entschuldigen</i></p>
+<button onclick="showModel()">Xem bài mẫu</button>
+<div id="model" style="display:none;background:#eef5ff;padding:15px;border-radius:8px">
+<b>Beispiel:</b><br>
+Bei einem Streit sollte man zunächst ruhig bleiben und keine Vorwürfe machen. 
+Man sollte beim Thema bleiben und dem anderen gut zuhören. Außerdem sind Ich-Botschaften hilfreich, 
+weil man dadurch seine eigenen Gefühle ausdrücken kann, ohne den anderen direkt anzugreifen. 
+Wenn eine gemeinsame Lösung nicht möglich ist, sollte man einen Kompromiss suchen. 
+Wenn man zu laut oder unfair geworden ist, sollte man sich entschuldigen.
+</div>
+</div>
+
+<script>
+const vocabData=[
+["der Vorwurf","lời trách móc / lời buộc tội",["lời khen","lời trách móc","lời đề nghị","lời xin lỗi"]],
+["das Gegenüber","người đối diện / người đối thoại",["người quản lý","người đối diện","người thân","người ngoài"]],
+["die Anspannung","sự căng thẳng",["sự thoải mái","sự im lặng","sự căng thẳng","sự đồng ý"]],
+["auf die lange Bank schieben","trì hoãn một việc",["giải quyết ngay","trì hoãn","quên một việc","thay đổi chủ đề"]],
+["zuhören","lắng nghe",["nói to","lắng nghe","tranh luận","giải thích"]],
+["hinnehmen","chấp nhận / chịu đựng",["từ chối","chấp nhận","thuyết phục","tránh"]],
+["sich entschuldigen","xin lỗi",["xin lỗi","tranh luận","tha thứ","đồng ý"]],
+["das Resümee","phần tổng kết",["lời mở đầu","phần tổng kết","lời phàn nàn","lời khuyên"]]
+];
+document.getElementById("vocab").innerHTML=vocabData.map((x,i)=>`<div class="q"><b>${i+1}. ${x[0]}</b>${x[2].map((o,j)=>`<label class="option"><input type="radio" name="v${i}" value="${j}"> ${o}</label>`).join("")}<div id="vf${i}" class="feedback"></div></div>`).join("");
+
+function checkVocab(){let s=0;vocabData.forEach((x,i)=>{let a=document.querySelector(`input[name=v${i}]:checked`),f=document.getElementById("vf"+i);if(a&&+a.value===x[1]?false:false){};if(a&&x[2][+a.value]===x[1]){s++;f.textContent="✓ Richtig";f.style.color="green"}else{f.textContent="✗ Richtig: "+x[1];f.style.color="#b00"}});document.getElementById("vocabScore").textContent=` ${s}/${vocabData.length}`}
+
+const gaps=[
+["Ein Streit, der mit einem ___ beginnt, hat keine guten Aussichten auf Erfolg.","Vorwurf"],
+["Man sollte ruhig bleiben, um der ___ näher zu kommen.","Konfliktlösung"],
+["Dann hat auch dein ___ die Chance, konkret zu reagieren.","Gegenüber"],
+["Kurz vor dem Einschlafen kann wichtige Themen anzusprechen unnötige ___ erzeugen.","Anspannung"],
+["Man sollte gut ___ und Interesse zeigen.","zuhören"],
+["Wenn nicht alle zufrieden sein können, kann ein ___ helfen.","Kompromiss"],
+["Wenn man zu laut geworden ist, sollte man sich ___.","entschuldigen"],
+["Am Ende des Tages kann man ein ___ ziehen.","Resümee"]
+];
+document.getElementById("gap").innerHTML=gaps.map((x,i)=>`<div class="q">${i+1}. ${x[0].replace("___",`<input id="g${i}" style="width:180px">`)}<div id="gf${i}" class="feedback"></div></div>`).join("");
+function checkGap(){let s=0;gaps.forEach((x,i)=>{let v=document.getElementById("g"+i).value.trim().toLowerCase(),a=x[1].toLowerCase(),f=document.getElementById("gf"+i);if(v===a){s++;f.textContent="✓ Richtig";f.style.color="green"}else{f.textContent="✗ Richtig: "+x[1];f.style.color="#b00"}});document.getElementById("gapScore").textContent=` ${s}/${gaps.length}`}
+
+const gram=[
+["Wenn jemand müde ist, ___ man nicht konstruktiv diskutieren.","kann","kann","können"],
+["Man sollte ___ Thema bleiben.","beim","bei den","an die"],
+["Die Diskussion sollte ___ einen späteren Termin verschoben werden.","auf","an","in"],
+["Der Partner will in erster Linie ___.","gehört werden","gehören","zu hören"],
+["Je früher Kinder anfangen, ___ leichter können sie lernen.","desto","obwohl","damit"]
+];
+document.getElementById("grammar").innerHTML=gram.map((x,i)=>`<div class="q"><b>${i+1}. ${x[0]}</b>${[x[2],x[3],x[1]].map((o,j)=>`<label class="option"><input type="radio" name="gr${i}" value="${o}"> ${o}</label>`).join("")}<div id="grf${i}" class="feedback"></div></div>`).join("");
+function checkGrammar(){let s=0;gram.forEach((x,i)=>{let a=document.querySelector(`input[name=gr${i}]:checked`),f=document.getElementById("grf"+i);if(a&&a.value===x[1]){s++;f.textContent="✓ Richtig";f.style.color="green"}else{f.textContent="✗ Richtig: "+x[1];f.style.color="#b00"}});document.getElementById("grammarScore").textContent=` ${s}/${gram.length}`}
+
+const tf=[
+["Streit ist grundsätzlich immer schlecht.","Falsch"],
+["Man sollte bei einem Streit möglichst beim Thema bleiben.","Richtig"],
+["Wichtige Gespräche sollte man am besten kurz vor dem Einschlafen beginnen.","Falsch"],
+["Gut zuzuhören hilft dem Gegenüber, sich gehört zu fühlen.","Richtig"],
+["Eine gemeinsame Lösung ist in jedem Konflikt garantiert möglich.","Falsch"],
+["Wenn man sich falsch verhalten hat, kann eine Entschuldigung wichtig sein.","Richtig"]
+];
+document.getElementById("tf").innerHTML=tf.map((x,i)=>`<div class="q"><b>${i+1}. ${x[0]}</b><label class="option"><input type="radio" name="tf${i}" value="Richtig"> Richtig</label><label class="option"><input type="radio" name="tf${i}" value="Falsch"> Falsch</label><div id="tff${i}" class="feedback"></div></div>`).join("");
+function checkTF(){let s=0;tf.forEach((x,i)=>{let a=document.querySelector(`input[name=tf${i}]:checked`),f=document.getElementById("tff"+i);if(a&&a.value===x[1]){s++;f.textContent="✓ Richtig";f.style.color="green"}else{f.textContent="✗ Richtig: "+x[1];f.style.color="#b00"}});document.getElementById("tfScore").textContent=` ${s}/${tf.length}`}
+
+const matches=[
+["ruhig","bleiben"],
+["beim Thema","bleiben"],
+["Interesse","zeigen"],
+["einen Kompromiss","finden"],
+["um Verzeihung","bitten"],
+["eine Entschuldigung","annehmen"]
+];
+document.getElementById("match").innerHTML=matches.map((x,i)=>`<div class="q"><b>${i+1}. ${x[0]}</b> + <select id="m${i}"><option value="">-- wählen --</option>${matches.map(y=>`<option>${y[1]}</option>`).filter((v,j,a)=>a.indexOf(v)===j).join("")}</select><div id="mf${i}" class="feedback"></div></div>`).join("");
+function checkMatch(){let s=0;matches.forEach((x,i)=>{let a=document.getElementById("m"+i).value,f=document.getElementById("mf"+i);if(a===x[1]){s++;f.textContent="✓ Richtig";f.style.color="green"}else{f.textContent="✗ Richtig: "+x[1];f.style.color="#b00"}});document.getElementById("matchScore").textContent=` ${s}/${matches.length}`}
+
+function showModel(){document.getElementById("model").style.display="block";}
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>German B2–C1 Vocabulary Lab — Wie lesen wir eigentlich?</title>
+<style>
+:root{--bg:#f4f6fb;--panel:#fff;--ink:#182238;--muted:#62708a;--accent:#4258c5;--accent2:#e8ecff;--good:#18794e;--bad:#b42318;--line:#dfe4ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#202d69,#5367d5);color:white;padding:34px 20px}header .wrap,main{max-width:1050px;margin:auto}h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.15;margin:0 0 10px}header p{margin:0;color:#e8ebff;max-width:760px}
+main{padding:22px 16px 50px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.tab,button{border:0;border-radius:10px;padding:10px 15px;font:inherit;font-weight:650;cursor:pointer}.tab{background:#e5e9f4;color:#263451}.tab.active,button.primary{background:var(--accent);color:white}button.secondary{background:var(--accent2);color:#263a92}button.light{background:#edf0f7;color:var(--ink)}button:focus-visible,.tab:focus-visible{outline:3px solid #ffbf47;outline-offset:2px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,26px);box-shadow:0 5px 18px #24345a0a}.section{display:none}.section.active{display:block}.muted{color:var(--muted)}.small{font-size:.9rem}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.pill{display:inline-block;border-radius:99px;background:#eef1fa;padding:3px 10px;font-size:.8rem;font-weight:700;color:#34426b}
+.flashcard{min-height:265px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#f8f9ff,#e9edff);border:1px solid #d8defb;border-radius:18px;padding:28px;margin:16px 0;cursor:pointer;user-select:none}.flashcard .word{font-size:clamp(1.5rem,4vw,2.35rem);font-weight:800;overflow-wrap:anywhere}.flashcard .hint{margin-top:14px;color:var(--muted)}.flashcard.revealed{background:#f1fbf6;border-color:#b7e4cc}.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.progress{height:8px;background:#e9edf5;border-radius:99px;overflow:hidden;margin:12px 0}.progress div{height:100%;width:0;background:var(--accent);transition:width .2s}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}.stat{background:#f7f8fc;border-radius:12px;padding:10px 14px;min-width:110px}.stat strong{display:block;font-size:1.25rem}
+input[type=text],select{width:100%;padding:11px 12px;border:1px solid #cbd3e3;border-radius:10px;font:inherit;background:white;color:var(--ink)}label{display:block;font-weight:650;margin:12px 0 5px}.question{padding:16px 0;border-bottom:1px solid var(--line)}.question:last-child{border:0}.question p{margin:0 0 8px;font-weight:650}.options{display:grid;gap:7px}.options label{display:flex;align-items:flex-start;gap:9px;font-weight:400;margin:0;background:#f7f8fc;padding:9px 11px;border-radius:9px;cursor:pointer}.options input{margin-top:5px}.feedback{margin-top:8px;font-weight:650}.correct{color:var(--good)}.incorrect{color:var(--bad)}.result{padding:13px;border-radius:10px;background:#f1f4ff;margin-top:15px}.vocab-table{width:100%;border-collapse:collapse;margin-top:12px}.vocab-table th,.vocab-table td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}.vocab-table th{background:#f5f7fc}.vocab-table td:first-child{font-weight:700}.table-wrap{overflow-x:auto}.footer{font-size:.85rem;color:var(--muted);margin-top:20px}
+@media(max-width:600px){.vocab-table th,.vocab-table td{padding:8px;font-size:.92rem}.flashcard{min-height:230px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>German B2–C1 Vocabulary Lab</h1>
+<p><em>Wie lesen wir eigentlich?</em> — Learn the key verbs, nouns and expressions with flashcards, quizzes and sentence practice.</p>
+</div></header>
+<main>
+<div class="tabs" role="tablist" aria-label="Study sections">
+<button class="tab active" data-tab="cards" role="tab" aria-selected="true">Flashcards</button>
+<button class="tab" data-tab="quiz" role="tab" aria-selected="false">Meaning quiz</button>
+<button class="tab" data-tab="gaps" role="tab" aria-selected="false">Fill the gaps</button>
+<button class="tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
+<button class="tab" data-tab="list" role="tab" aria-selected="false">Vocabulary list</button>
+</div>
+
+<section id="cards" class="section active panel">
+<div class="row between"><div><h2 style="margin:0">Flashcards</h2><p class="muted" style="margin:4px 0">Try to recall the meaning before revealing the answer. Click the card to flip it.</p></div><select id="deckFilter" aria-label="Filter flashcards" style="max-width:190px"><option value="all">All vocabulary</option><option value="verb">Verbs</option><option value="noun">Nouns</option><option value="expression">Expressions</option></select></div>
+<div class="row between small"><span id="cardCount">Card 1 of 1</span><span id="knownCount">Known: 0 · Review: 0</span></div><div class="progress"><div id="cardProgress"></div></div>
+<div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Flashcard. Click to reveal answer"><div><div class="pill" id="cardType">Verb</div><div class="word" id="frontWord">aufnehmen</div><div class="hint" id="cardHint">Click or press Enter to reveal</div><div id="backExtra" class="muted" style="margin-top:10px"></div></div></div>
+<div class="controls"><button class="light" id="prev">← Previous</button><button class="primary" id="flip">Reveal answer</button><button class="light" id="next">Next →</button></div>
+<div class="controls" style="margin-top:12px"><button class="secondary" id="markKnown">✓ I know this</button><button class="light" id="markReview">↻ Review again</button><button class="light" id="shuffle">Shuffle deck</button></div>
+<p class="footer">Progress is kept only while this page remains open. Use “Vocabulary list” to review every item and example.</p>
+</section>
+
+<section id="quiz" class="section panel">
+<h2>Meaning quiz</h2><p class="muted">Choose the best English meaning for each German word. Your score appears when you check your answers.</p>
+<form id="quizForm"><div id="quizQuestions"></div><div class="row" style="margin-top:16px"><button class="primary" type="submit">Check answers</button><button class="light" type="button" id="resetQuiz">Try again</button></div></form><div id="quizResult" aria-live="polite"></div>
+</section>
+
+<section id="gaps" class="section panel">
+<h2>Fill the gaps</h2><p class="muted">Complete each sentence with the correct word or expression. Capitalization is ignored.</p>
+<form id="gapForm"><div id="gapQuestions"></div><div class="row" style="margin-top:16px"><button class="primary" type="submit">Check answers</button><button class="light" type="button" id="resetGaps">Try again</button></div></form><div id="gapResult" aria-live="polite"></div>
+</section>
+
+<section id="translate" class="section panel">
+<h2>Translate into German</h2><p class="muted">Type the German word or expression. Accents and capitalization are not important; accepted alternatives are shown after checking.</p>
+<form id="translateForm"><div id="translateQuestions"></div><div class="row" style="margin-top:16px"><button class="primary" type="submit">Check answers</button><button class="light" type="button" id="resetTranslate">Try again</button></div></form><div id="translateResult" aria-live="polite"></div>
+</section>
+
+<section id="list" class="section panel">
+<h2>Vocabulary list</h2><p class="muted">Meanings and examples from the reading topic. Some items are useful B2–C1 expressions rather than fixed CEFR-only vocabulary.</p>
+<label for="searchVocab">Search vocabulary</label><input id="searchVocab" type="text" placeholder="Search German, English, or example…">
+<div class="table-wrap"><table class="vocab-table"><thead><tr><th>German</th><th>Type</th><th>English</th><th>Example</th></tr></thead><tbody id="vocabBody"></tbody></table></div>
+</section>
+</main>
+<script>
+const vocab = [
+{de:"aufnehmen",type:"verb",en:"to take in; absorb",ex:"Wir nehmen Wörter als Bilder auf."},
+{de:"gleiten",type:"verb",en:"to glide",ex:"Die Augen gleiten über die Zeilen."},
+{de:"sich zeigen",type:"expression",en:"to become apparent; show itself",ex:"Das zeigt sich beim Lesen."},
+{de:"verfolgen",type:"verb",en:"to follow; track",ex:"Forschende verfolgen die Pupillenbewegungen."},
+{de:"vorwärtsgehen",type:"verb",en:"to move forward",ex:"Der Blick geht in kurzen Sprüngen vorwärts."},
+{de:"benötigen",type:"verb",en:"to require; need",ex:"Lange Wörter benötigen manchmal mehrere Blicke."},
+{de:"erkennen",type:"verb",en:"to recognize",ex:"Wir erkennen bekannte Wörter schnell."},
+{de:"vergleichen mit + Dativ",type:"verb",en:"to compare with",ex:"Man vergleicht ein Wort mit bekannten Wörtern."},
+{de:"verstehen",type:"verb",en:"to understand",ex:"Wir verstehen die Bedeutung des Wortes."},
+{de:"analysieren",type:"verb",en:"to analyze",ex:"Das Wortbild wird analysiert."},
+{de:"begleiten",type:"verb",en:"to accompany",ex:"Der Prozess wird von innerem Sprechen begleitet."},
+{de:"sich etwas vorsprechen",type:"expression",en:"to say/pronounce something to oneself",ex:"Man spricht sich das Wort innerlich vor."},
+{de:"buchstabieren",type:"verb",en:"to spell",ex:"Ein unbekanntes Wort buchstabiert man manchmal."},
+{de:"betragen",type:"verb",en:"to amount to",ex:"Die Lesegeschwindigkeit beträgt 250 Wörter pro Minute."},
+{de:"behandeln",type:"verb",en:"to deal with; cover a topic",ex:"Der Text behandelt ein Sachthema."},
+{de:"gehören zu + Dativ",type:"verb",en:"to belong to",ex:"Der Roman gehört zur Unterhaltungsliteratur."},
+{de:"erraten",type:"verb",en:"to guess correctly",ex:"Man kann manche Wörter aus dem Kontext erraten."},
+{de:"scharf sehen",type:"expression",en:"to see clearly / sharply",ex:"Die Augen können nur eine begrenzte Fläche scharf sehen."},
+{de:"dauern",type:"verb",en:"to last; take time",ex:"Ein Blick dauert Millisekunden."},
+{de:"die Vorstellung, -en",type:"noun",en:"idea; conception",ex:"Das entspricht nicht der verbreiteten Vorstellung."},
+{de:"der Gegensatz, -sätze",type:"noun",en:"contrast; opposite",ex:"Im Gegensatz dazu lesen wir nicht Buchstabe für Buchstabe."},
+{de:"die Pupillenbewegung, -en",type:"noun",en:"pupil movement",ex:"Die Pupillenbewegungen werden verfolgt."},
+{de:"der Blick, -e",type:"noun",en:"glance; gaze",ex:"Der Blick springt zum nächsten Wort."},
+{de:"der Sprung, Sprünge",type:"noun",en:"jump; leap",ex:"Der Blick bewegt sich in kurzen Sprüngen."},
+{de:"die Sakkade, -n",type:"noun",en:"saccade; rapid eye movement",ex:"Diese kurzen Blicksprünge heißen Sakkaden."},
+{de:"das Wortbild, -er",type:"noun",en:"visual form/image of a word",ex:"Das Wortbild hilft beim Erkennen."},
+{de:"die Bedeutung, -en",type:"noun",en:"meaning; significance",ex:"Wir verstehen die Bedeutung des Wortes."},
+{de:"der Prozess, -e",type:"noun",en:"process",ex:"Das innere Sprechen begleitet den Prozess."},
+{de:"der Buchstabe, -n",type:"noun",en:"letter of the alphabet",ex:"Man liest nicht immer jeden Buchstaben einzeln."},
+{de:"die Lesegeschwindigkeit, -en",type:"noun",en:"reading speed",ex:"Die Lesegeschwindigkeit beträgt etwa 200–250 Wörter pro Minute."},
+{de:"die Fläche, -n",type:"noun",en:"area; surface",ex:"Das Auge sieht nur eine begrenzte Fläche scharf."},
+{de:"die Unterhaltungsliteratur",type:"noun",en:"recreational / light literature",ex:"Bei Unterhaltungsliteratur ist das Lesen oft schneller."},
+{de:"das Sachthema, -themen",type:"noun",en:"factual topic; subject matter",ex:"Ein Sachthema verlangt oft genaues Lesen."},
+{de:"die Formulierung, -en",type:"noun",en:"wording; phrasing",ex:"Viele Formulierungen lassen sich aus dem Kontext erraten."},
+{de:"die Millisekunde, -n",type:"noun",en:"millisecond",ex:"Ein Blick dauert wenige Millisekunden."},
+{de:"die Zeile, -n",type:"noun",en:"line of text",ex:"Die Augen gleiten über die Zeilen."},
+{de:"im Gegensatz zu + Dativ",type:"expression",en:"in contrast to",ex:"Im Gegensatz zur verbreiteten Vorstellung lesen wir nicht Buchstabe für Buchstabe."},
+{de:"genauer gesagt",type:"expression",en:"more precisely; to be exact",ex:"Das Wort, genauer gesagt das Wortbild, wird erkannt."},
+{de:"in diesem Fall",type:"expression",en:"in this case",ex:"In diesem Fall buchstabiert man."},
+{de:"beispielsweise",type:"expression",en:"for example",ex:"Es kann beispielsweise ein Fremdwort sein."},
+{de:"auf einmal",type:"expression",en:"all at once; at a time",ex:"Wir sehen nur eine begrenzte Fläche auf einmal."},
+{de:"einen Blick auf etwas werfen",type:"expression",en:"to take a look at something",ex:"Sie wirft einen Blick auf das Wort."},
+{de:"etwas mit einem Blick erfassen",type:"expression",en:"to grasp something at a glance",ex:"Man kann kurze Wörter mit einem Blick erfassen."},
+{de:"zu Ende lesen",type:"expression",en:"to finish reading",ex:"Manchmal errät man ein Wort, bevor man es zu Ende gelesen hat."},
+{de:"sich um etwas handeln",type:"expression",en:"to be a matter of; to concern",ex:"Es handelt sich um ein fremdsprachiges Wort."},
+{de:"aus etwas bestehen",type:"expression",en:"to consist of",ex:"Ein Satz besteht aus Wörtern."},
+{de:"eine Rolle spielen",type:"expression",en:"to play a role",ex:"Der Kontext spielt beim Lesen eine wichtige Rolle."},
+{de:"sich auf etwas konzentrieren",type:"expression",en:"to concentrate on something",ex:"Beim Lesen konzentrieren wir uns auf den Text."},
+{de:"die Bedeutung eines Wortes erfassen",type:"expression",en:"to grasp the meaning of a word",ex:"Wir versuchen, die Bedeutung eines Wortes zu erfassen."},
+{de:"bevor",type:"expression",en:"before (introducing a subordinate clause)",ex:"Man errät Wörter, bevor man sie zu Ende gelesen hat."}
+];
+
+const quizData = [
+{q:'„Die Augen gleiten über die Zeilen.“ Was bedeutet „gleiten“?',opts:["to glide","to spell","to compare","to require"],a:0},
+{q:'Was bedeutet „betragen“ in „Die Geschwindigkeit beträgt 250 Wörter“?',opts:["to last","to amount to","to recognize","to accompany"],a:1},
+{q:'„Im Gegensatz zu“ bedeutet …',opts:["for example","at a time","in contrast to","to finish"],a:2},
+{q:'Was ist „die Formulierung“?',opts:["a letter","a surface","a saccade","wording / phrasing"],a:3},
+{q:'„ein Wortbild“ ist …',opts:["the visual form of a word","a factual topic","a reading line","a millisecond"],a:0},
+{q:'„erraten“ bedeutet …',opts:["to analyze","to guess correctly","to move forward","to accompany"],a:1},
+{q:'„gehören zu + Dativ“ means …',opts:["to compare with","to take in","to belong to","to see clearly"],a:2},
+{q:'Was bedeutet „auf einmal“?',opts:["more precisely","before","in contrast","all at once"],a:3},
+{q:'„die Lesegeschwindigkeit“ means …',opts:["reading speed","pupil movement","meaning","entertainment literature"],a:0},
+{q:'„zu Ende lesen“ means …',opts:["to read sharply","to finish reading","to spell aloud","to play a role"],a:1}
+];
+const gapData = [
+{q:'Die Augen ______ über die Zeilen.',a:'gleiten',hint:'to glide'},
+{q:'Die Lesegeschwindigkeit ______ etwa 250 Wörter pro Minute.',a:'beträgt',hint:'to amount to'},
+{q:'Man ______ das Wort mit bekannten Wörtern.',a:'vergleicht',hint:'to compare'},
+{q:'Der Text ______ ein wissenschaftliches Thema.',a:'behandelt',hint:'to deal with / cover'},
+{q:'Der Roman ______ zur Unterhaltungsliteratur.',a:'gehört',hint:'to belong'},
+{q:'Man kann Wörter aus dem Kontext ______.',a:'erraten',hint:'to guess correctly'},
+{q:'Man liest ein Wort manchmal, bevor man es zu Ende ______ hat.',a:'gelesen',hint:'past participle of lesen'},
+{q:'______ zur verbreiteten Vorstellung lesen wir nicht Buchstabe für Buchstabe.',a:'im gegensatz',hint:'in contrast to'},
+{q:'Das Auge kann nur eine begrenzte ______ scharf sehen.',a:'fläche',hint:'area / surface'},
+{q:'Es ______ sich um ein fremdsprachiges Wort.',a:'handelt',hint:'fixed expression: es handelt sich um'}
+];
+const translateData = [
+{q:'to recognize',a:['erkennen']},
+{q:'to take in / absorb',a:['aufnehmen']},
+{q:'meaning / significance',a:['die bedeutung','bedeutung']},
+{q:'reading speed',a:['die lesegeschwindigkeit','lesegeschwindigkeit']},
+{q:'in this case',a:['in diesem fall']},
+{q:'more precisely',a:['genauer gesagt']},
+{q:'to spell',a:['buchstabieren']},
+{q:'to compare with (+ dative)',a:['vergleichen mit','vergleichen mit + dativ']},
+{q:'to finish reading',a:['zu ende lesen']},
+{q:'to consist of',a:['aus etwas bestehen','bestehen aus','aus etwas bestehen']},
+{q:'to concentrate on something',a:['sich auf etwas konzentrieren']},
+{q:'to play a role',a:['eine rolle spielen']}
+];
+let deck=[...vocab],idx=0,revealed=false,known=new Set(),review=new Set();
+const $=id=>document.getElementById(id);
+function normalize(s){return s.toLocaleLowerCase('de').trim().replace(/[.,!?;:]/g,'').replace(/\s+/g,' ')}
+function filteredDeck(){const f=$('deckFilter').value;return f==='all'?deck:deck.filter(v=>v.type===f)}
+function renderCard(){let d=filteredDeck();if(!d.length)return;idx=Math.max(0,Math.min(idx,d.length-1));let v=d[idx];$('cardCount').textContent=`Card ${idx+1} of ${d.length}`;$('knownCount').textContent=`Known: ${known.size} · Review: ${review.size}`;$('cardProgress').style.width=((idx+1)/d.length*100)+'%';$('cardType').textContent=v.type==='verb'?'Verb':v.type==='noun'?'Noun':'Expression';$('frontWord').textContent=revealed?v.en:v.de;$('cardHint').textContent=revealed?'Meaning':'Click or press Enter to reveal';$('backExtra').textContent=revealed?v.ex:'';$('flashcard').classList.toggle('revealed',revealed);$('flashcard').setAttribute('aria-label',revealed?'Answer: '+v.en:'German: '+v.de+'. Click to reveal');$('flip').textContent=revealed?'Show German':'Reveal answer'}
+function flip(){revealed=!revealed;renderCard()}
+$('flashcard').addEventListener('click',flip);$('flashcard').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});$('flip').onclick=flip;
+$('prev').onclick=()=>{idx=(idx-1+filteredDeck().length)%filteredDeck().length;revealed=false;renderCard()};
+$('next').onclick=()=>{idx=(idx+1)%filteredDeck().length;revealed=false;renderCard()};
+$('deckFilter').onchange=()=>{idx=0;revealed=false;renderCard()};
+$('markKnown').onclick=()=>{const v=filteredDeck()[idx];known.add(v.de);review.delete(v.de);idx=(idx+1)%filteredDeck().length;revealed=false;renderCard()};
+$('markReview').onclick=()=>{const v=filteredDeck()[idx];review.add(v.de);known.delete(v.de);idx=(idx+1)%filteredDeck().length;revealed=false;renderCard()};
+$('shuffle').onclick=()=>{for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}idx=0;revealed=false;renderCard()};
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>{t.classList.toggle('active',t===b);t.setAttribute('aria-selected',t===b?'true':'false')});document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===b.dataset.tab))}));
+function renderQuiz(){ $('quizQuestions').innerHTML=quizData.map((x,i)=>`<div class="question"><p>${i+1}. ${x.q}</p><div class="options">${x.opts.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div><div id="qf${i}" class="feedback"></div></div>`).join('');$('quizResult').innerHTML=''}
+$('quizForm').onsubmit=e=>{e.preventDefault();let score=0;quizData.forEach((x,i)=>{let selected=document.querySelector(`input[name="q${i}"]:checked`),f=$('qf'+i);if(selected&&+selected.value===x.a){score++;f.className='feedback correct';f.textContent='Correct!'}else{f.className='feedback incorrect';f.textContent='Answer: '+x.opts[x.a]}});$('quizResult').innerHTML=`<div class="result"><strong>Your score: ${score}/${quizData.length}</strong> — ${score===quizData.length?'Excellent!':'Review the answers above and try again.'}</div>`};
+$('resetQuiz').onclick=()=>{renderQuiz()};
+function renderGaps(){$('gapQuestions').innerHTML=gapData.map((x,i)=>`<div class="question"><p>${i+1}. ${x.q}</p><input type="text" id="gap${i}" autocomplete="off" placeholder="Your answer"><div class="muted small">Hint: ${x.hint}</div><div id="gf${i}" class="feedback"></div></div>`).join('');$('gapResult').innerHTML=''}
+$('gapForm').onsubmit=e=>{e.preventDefault();let score=0;gapData.forEach((x,i)=>{let val=normalize($('gap'+i).value),ans=normalize(x.a),ok=val===ans|| (i===7&&val==='im gegensatz');let f=$('gf'+i);if(ok){score++;f.className='feedback correct';f.textContent='Correct!'}else{f.className='feedback incorrect';f.textContent='Suggested answer: '+x.a}});$('gapResult').innerHTML=`<div class="result"><strong>Your score: ${score}/${gapData.length}</strong></div>`};
+$('resetGaps').onclick=renderGaps;
+function renderTranslate(){$('translateQuestions').innerHTML=translateData.map((x,i)=>`<div class="question"><p>${i+1}. ${x.q}</p><input type="text" id="tr${i}" autocomplete="off" placeholder="German word or expression"><div id="tf${i}" class="feedback"></div></div>`).join('');$('translateResult').innerHTML=''}
+$('translateForm').onsubmit=e=>{e.preventDefault();let score=0;translateData.forEach((x,i)=>{let val=normalize($('tr'+i).value),ok=x.a.some(a=>normalize(a)===val),f=$('tf'+i);if(ok){score++;f.className='feedback correct';f.textContent='Correct!'}else{f.className='feedback incorrect';f.textContent='Suggested answer: '+x.a[0]}});$('translateResult').innerHTML=`<div class="result"><strong>Your score: ${score}/${translateData.length}</strong></div>`};
+$('resetTranslate').onclick=renderTranslate;
+function renderVocab(){let q=normalize($('searchVocab').value);$('vocabBody').innerHTML=vocab.filter(v=>normalize(v.de+' '+v.en+' '+v.ex+' '+v.type).includes(q)).map(v=>`<tr><td>${v.de}</td><td>${v.type}</td><td>${v.en}</td><td>${v.ex}</td></tr>`).join('')}
+$('searchVocab').addEventListener('input',renderVocab);
+renderCard();renderQuiz();renderGaps();renderTranslate();renderVocab();
+</script>
+</body>
+</html>
