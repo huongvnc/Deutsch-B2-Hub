@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nomen-Verb-Verbindungen – Lernkarten & Übungen</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#657087;--accent:#4057c8;--accent2:#e9edff;--good:#16794b;--bad:#b83232;--line:#dce1ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#17234a;color:white;padding:28px 20px 24px}header .wrap,main{max-width:980px;margin:auto}h1{font-size:clamp(1.5rem,4vw,2.2rem);margin:0 0 5px}header p{margin:0;color:#dce3ff}
+main{padding:22px 16px 50px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+button,select,input{font:inherit}button{border:0;border-radius:10px;padding:10px 15px;background:var(--accent);color:white;cursor:pointer;font-weight:650}
+button.secondary{background:var(--accent2);color:#263b9d}button:disabled{opacity:.45;cursor:not-allowed}
+.tab{background:#e4e8f2;color:#29334a}.tab.active{background:var(--accent);color:white}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 6px 24px #17234a0a}
+.hidden{display:none}.muted{color:var(--muted)}.counter{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.flashcard{min-height:230px;border:2px solid var(--line);border-radius:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:26px;cursor:pointer;background:linear-gradient(145deg,#fff,#f8f9ff)}
+.flashcard .term{font-size:clamp(1.35rem,4vw,2rem);font-weight:750;max-width:720px}.flashcard .answer{font-size:1.2rem;margin-top:16px;max-width:720px}.hint{font-size:.85rem;color:var(--muted);margin-top:18px}
+.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}.row label{font-weight:650}
+select,input[type=text]{padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}
+.progress{height:8px;background:#e8ebf3;border-radius:20px;overflow:hidden;margin:10px 0 18px}.progress span{display:block;height:100%;background:var(--accent);width:0}
+.question{font-size:1.2rem;font-weight:700;margin:8px 0 18px}.options{display:grid;gap:9px}.option{background:white;color:var(--ink);border:1px solid var(--line);text-align:left;font-weight:500}.option:hover{border-color:var(--accent)}.option.correct{background:#e7f6ee;border-color:#72c49a;color:#125b38}.option.wrong{background:#fff0f0;border-color:#e49a9a;color:#922828}
+.feedback{margin-top:14px;padding:12px;border-radius:10px;background:#f0f2f8}.feedback.good{background:#e7f6ee;color:#125b38}.feedback.bad{background:#fff0f0;color:#922828}
+.score{font-size:1.05rem;font-weight:700}.small{font-size:.9rem}.list{display:grid;gap:8px;margin-top:15px}.list details{border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:white}.list summary{font-weight:700;cursor:pointer}.list p{margin:8px 0 0;color:#46516a}
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:20px}
+@media(max-width:560px){.panel{padding:16px}.flashcard{min-height:210px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Nomen-Verb-Verbindungen</h1><p>Lernkarten · Multiple-Choice-Training · Nachschlage-Liste</p></div></header>
+<main>
+<div class="tabs">
+<button class="tab active" data-tab="cards">Lernkarten</button>
+<button class="tab" data-tab="quiz">Übung</button>
+<button class="tab" data-tab="list">Alle Verbindungen</button>
+</div>
+<section id="cards" class="panel">
+<div class="row">
+<label for="direction">Lernrichtung:</label>
+<select id="direction"><option value="a">Verbindung → Bedeutung / Synonym</option><option value="b">Bedeutung / Synonym → Verbindung</option></select>
+<label><input id="shuffle" type="checkbox"> Mischen</label>
+</div>
+<div class="counter" id="cardCount"></div><div class="progress"><span id="cardProgress"></span></div>
+<div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Karte umdrehen">
+<div class="term" id="front"></div><div class="answer hidden" id="back"></div>
+<div class="hint" id="hint">Klicken oder Enter drücken, um die Antwort zu sehen</div>
+</div>
+<div class="controls">
+<button class="secondary" id="prev">← Zurück</button><button id="flip">Antwort zeigen</button><button class="secondary" id="next">Weiter →</button>
+</div>
+</section>
+<section id="quiz" class="panel hidden">
+<div class="row"><span class="score" id="score">Punkte: 0 / 0</span><span class="muted small">Wähle die passende Bedeutung oder Nomen-Verb-Verbindung.</span></div>
+<div class="progress"><span id="quizProgress"></span></div>
+<div class="counter" id="quizCount"></div><div class="question" id="question"></div>
+<div class="options" id="options"></div><div id="feedback" aria-live="polite"></div>
+<div class="controls"><button id="nextQ" disabled>Nächste Frage →</button><button class="secondary" id="restart">Neu starten</button></div>
+</section>
+<section id="list" class="panel hidden">
+<div class="row"><label for="search">Suchen:</label><input id="search" type="text" placeholder="z. B. Druck, Frage, Verfügung…" style="flex:1;min-width:180px"></div>
+<div class="muted small" id="listCount"></div><div class="list" id="allItems"></div>
+</section>
+<footer>Hinweis: A = Akkusativ · D = Dativ · jmd. = jemand · etw. = etwas</footer>
+</main>
+<script>
+const data = [["in Abhängigkeit geraten von etw. (D)", "abhängig werden von etw. (D)"], ["in Abhängigkeit stehen zu etw. (D)", "abhängig voneinander sein"], ["Anforderungen stellen an jmdn./etw.", "etw. von jmdm./etw. verlangen oder erwarten"], ["Ansprüche stellen", "etw. von jmdm./etw. verlangen oder erwarten; anspruchsvoll sein"], ["einen Antrag stellen auf etw. (A)", "etw. beantragen"], ["zur Auffassung kommen", "nach längerem Nachdenken oder Abwägen zu einer Meinung kommen"], ["in Aufregung geraten", "nervös oder aufgeregt werden"], ["in Panik geraten", "panisch, nervös oder sehr aufgeregt werden"], ["etw. (A) zum Ausdruck bringen", "etw. ausdrücken oder äußern"], ["jmdm. etw. (A) in Aussicht stellen", "jmdm. etw. versprechen oder unverbindlich zusagen"], ["eine Bedingung stellen", "etw. fordern, bevor man etw. tut"], ["ein Beispiel anführen / geben / nennen für etw. (A)", "ein Beispiel für etw. nennen"], ["in Betracht kommen", "eine Möglichkeit sein"], ["etw. (A) in Betracht ziehen", "etw. erwägen, bedenken oder darüber nachdenken"], ["eine Diskussion führen über etw. (A)", "über etw. diskutieren"], ["zur Diskussion stehen", "diskutiert werden müssen oder können"], ["etw. zur Diskussion stellen", "anregen oder fordern, dass etw. diskutiert wird"], ["unter Druck stehen", "sich in einer belastenden Situation befinden; z. B. wegen Zeitmangels"], ["unter Zeitdruck stehen", "eine Aufgabe in knapper Zeit erledigen müssen"], ["jmdn. unter Druck setzen", "versuchen, jmdn. zu etwas zu drängen oder zu zwingen"], ["etw./jmdn. auf eine Ebene stellen mit etw. (D)", "etw./jmdn. als gleichwertig ansehen oder betrachten"], ["Einfluss nehmen auf etw./jmdn.", "etw./jmdn. beeinflussen"], ["zum Einsatz kommen", "eingesetzt oder verwendet werden"], ["zu einem Ergebnis kommen", "ein Ergebnis erreichen oder erzielen"], ["jmdn. in Erstaunen versetzen", "jmdn. erstaunen oder staunen lassen"], ["eine Frage stellen", "etw. fragen"], ["etw. (A) in Frage stellen", "etw. bezweifeln oder infrage stellen"], ["außer Frage stehen", "klar oder unzweifelhaft sein"], ["eine Funktion erfüllen", "eine Funktion oder Aufgabe haben"], ["Gefühle hervorrufen / auslösen bei jmdm.", "bei jmdm. Gefühle verursachen"], ["ein Gespräch führen mit jmdm.", "mit jmdm. sprechen"], ["Gründe nennen / anführen für etw. (A)", "etw. begründen"], ["in der Lage sein (+ zu + Inf.)", "etw. können; fähig sein, etw. zu tun"], ["auf eine Idee kommen", "eine Idee oder einen Einfall haben"], ["ins Internet gehen", "das Internet aufrufen oder nutzen"], ["ein Interview führen mit jmdm.", "jmdn. interviewen oder befragen"], ["ein Interview geben", "sich interviewen oder befragen lassen"], ["Protokoll führen", "etw. protokollieren"], ["Respekt genießen bei jmdm.", "von jmdm. respektiert werden"], ["in Schwierigkeiten geraten", "Schwierigkeiten oder Probleme bekommen"], ["jmdm. etw. (A) zur Verfügung stellen", "jmdm. etw. geben, anbieten oder liefern"], ["jmdm. zur Verfügung stehen", "für jmdn. verfügbar sein"], ["über etw. verfügen", "etw. haben oder besitzen"], ["etw. steht zur Verfügung", "etw. ist verfügbar oder vorhanden"], ["in Vergessenheit geraten", "vergessen werden"], ["Verhandlungen führen", "verhandeln"], ["zur Verwendung kommen", "verwendet werden"], ["Verwendung finden", "verwendet werden"], ["im Vordergrund stehen", "wichtig sein oder besonders beachtet werden"], ["etw. (A) in den Vordergrund stellen", "etw. als wichtig hervorheben oder wichtig machen"]];
+let deck = data.map((_,i)=>i), pos=0, flipped=false, qIndex=0, score=0, answered=false, quizDeck=[];
+const $=id=>document.getElementById(id);
+function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function renderCard(){
+ const i=deck[pos], reverse=$('direction').value==='b';
+ $('front').textContent=data[i][reverse?1:0];$('back').textContent=data[i][reverse?0:1];
+ $('back').classList.toggle('hidden',!flipped);$('hint').textContent=flipped?'Karte anklicken oder auf „Weiter“ drücken':'Klicken oder Enter drücken, um die Antwort zu sehen';
+ $('flip').textContent=flipped?'Frage zeigen':'Antwort zeigen';$('cardCount').textContent=`Karte ${pos+1} von ${deck.length}`;
+ $('cardProgress').style.width=((pos+1)/deck.length*100)+'%';$('prev').disabled=pos===0;$('next').disabled=pos===deck.length-1;
+}
+function flip(){flipped=!flipped;renderCard()}
+function move(n){pos=Math.max(0,Math.min(deck.length-1,pos+n));flipped=false;renderCard()}
+$('flashcard').addEventListener('click',flip);$('flashcard').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
+$('flip').onclick=flip;$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);
+$('direction').onchange=()=>{flipped=false;renderCard()};
+$('shuffle').onchange=()=>{deck=$('shuffle').checked?shuffle(data.map((_,i)=>i)):data.map((_,i)=>i);pos=0;flipped=false;renderCard()};
+function startQuiz(){quizDeck=shuffle(data.map((_,i)=>i));qIndex=0;score=0;renderQuiz()}
+function renderQuiz(){
+ answered=false;$('feedback').className='';$('feedback').textContent='';$('nextQ').disabled=true;
+ $('score').textContent=`Punkte: ${score} / ${qIndex}`;$('quizCount').textContent=`Frage ${qIndex+1} von ${quizDeck.length}`;
+ $('quizProgress').style.width=(qIndex/quizDeck.length*100)+'%';
+ if(qIndex>=quizDeck.length){$('question').textContent=`Geschafft! Dein Ergebnis: ${score} von ${quizDeck.length} richtig.`;$('options').innerHTML='';$('nextQ').disabled=true;$('quizCount').textContent='Übung beendet';$('quizProgress').style.width='100%';return}
+ const idx=quizDeck[qIndex], reverse=Math.random()<.5, prompt=data[idx][reverse?1:0], correct=data[idx][reverse?0:1];
+ $('question').textContent=prompt;
+ let distractors=shuffle(data.filter((_,i)=>i!==idx).map(x=>x[reverse?0:1])).slice(0,3);
+ let choices=shuffle([correct,...distractors]);
+ $('options').innerHTML='';
+ choices.forEach(choice=>{let b=document.createElement('button');b.className='option';b.textContent=choice;b.onclick=()=>checkAnswer(b,choice,correct);$('options').appendChild(b)});
+}
+function checkAnswer(btn,choice,correct){
+ if(answered)return;answered=true;const ok=choice===correct;if(ok)score++;
+ [...$('options').children].forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct')});
+ if(!ok)btn.classList.add('wrong');
+ $('feedback').className='feedback '+(ok?'good':'bad');$('feedback').textContent=(ok?'Richtig! ':'Nicht ganz. Richtige Antwort: ')+correct;
+ $('score').textContent=`Punkte: ${score} / ${qIndex+1}`;$('nextQ').disabled=false;$('nextQ').textContent=qIndex===quizDeck.length-1?'Ergebnis anzeigen':'Nächste Frage →';
+}
+$('nextQ').onclick=()=>{qIndex++;renderQuiz()};$('restart').onclick=startQuiz;
+function renderList(filter=''){
+ const filtered=data.filter(x=>x.join(' ').toLowerCase().includes(filter.toLowerCase()));
+ $('listCount').textContent=`${filtered.length} von ${data.length} Einträgen`;
+ $('allItems').innerHTML='';
+ filtered.forEach(x=>{let d=document.createElement('details'),s=document.createElement('summary'),p=document.createElement('p');s.textContent=x[0];p.textContent=x[1];d.append(s,p);$('allItems').appendChild(d)});
+}
+$('search').oninput=e=>renderList(e.target.value);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['cards','quiz','list'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab))});
+renderCard();renderList();startQuiz();
+</script>
+</body></html>
